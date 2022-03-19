@@ -5,6 +5,7 @@ import SignIn from "../pages/SignIn";
 import SignOut from "../pages/SignOut";
 import CreatePost from "../pages/CreatePost";
 import AllUsers from "../pages/AllUsers";
+import FriendRequests from "../pages/FriendRequests";
 
 const Navbar = (props) => {
   return (
@@ -26,8 +27,13 @@ const Navbar = (props) => {
           </Link>
         </p>
         <p>
-          <Link className='nav-link' to='/all-users'>
+          <Link className="nav-link" to="/all-users">
             All Users
+          </Link>
+        </p>
+        <p>
+          <Link className="nav-link" to="/friend-requests">
+            Friend Requests
           </Link>
         </p>
       </section>
@@ -46,7 +52,16 @@ const Navbar = (props) => {
               <CreatePost user={props.user} firestore={props.firestore} />
             }
           />
-          <Route path='/all-users' element={<AllUsers user={props.user} firestore={props.firestore} />} />
+          <Route
+            path="/all-users/*"
+            element={<AllUsers user={props.user} firestore={props.firestore} />}
+          />
+          <Route
+            path="/friend-requests"
+            element={
+              <FriendRequests user={props.user} firestore={props.firestore} />
+            }
+          />
         </Routes>
       </section>
     </div>
