@@ -4,6 +4,7 @@ import UserProfile from "../pages/UserProfile";
 import SignIn from "../pages/SignIn";
 import SignOut from "../pages/SignOut";
 import CreatePost from "../pages/CreatePost";
+import AllUsers from "../pages/AllUsers";
 
 const Navbar = (props) => {
   return (
@@ -24,6 +25,11 @@ const Navbar = (props) => {
             New Post
           </Link>
         </p>
+        <p>
+          <Link className='nav-link' to='/all-users'>
+            All Users
+          </Link>
+        </p>
       </section>
       <section>
         <Routes>
@@ -40,6 +46,7 @@ const Navbar = (props) => {
               <CreatePost user={props.user} firestore={props.firestore} />
             }
           />
+          <Route path='/all-users' element={<AllUsers user={props.user} firestore={props.firestore} />} />
         </Routes>
       </section>
     </div>

@@ -6,8 +6,7 @@ const Post = (props) => {
   return (
     <div className="post">
       <p>{props.text}</p>
-      <p>- {props.user}</p>
-      <p>time: {formatTime(props.createdAt.seconds + "000")}</p>
+      <p>- {props.user} - {formatTime(props.createdAt.seconds + "000")}</p>
     </div>
   );
 };

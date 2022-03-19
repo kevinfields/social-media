@@ -48,6 +48,7 @@ const UserProfile = (props) => {
       <p id="user-profile-account-created" className="user-profile-details">
         Account Created: {formatTime(props.user.metadata.a)}
       </p>
+      
       <section id="user-profile-user-posts">
         {posts &&
           posts.map((post) => (

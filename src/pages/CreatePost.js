@@ -15,6 +15,7 @@ const CreatePost = (props) => {
       .add({
         text: text,
         createdAt: new Date(),
+        uid: props.user.uid,
       })
       .then(() => {
         setText("");
