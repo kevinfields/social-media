@@ -1,0 +1,311 @@
+const express = require('express');
+const expressGraphQL = require('express-graphql');
+
+const {
+    GraphQLSchema,
+    GraphQLObjectType,
+    GraphQLString,
+    GraphQLList,
+    GraphQLInt,
+    GraphQLNonNull,
+} = require('graphql');
+const { PossibleTypeExtensions } = require('graphql/validation/rules/PossibleTypeExtensions');
+
+const app = express();
+
+const users = [
+  {
+    id: 0,
+    name: 'Moose Marshall',
+    bio: 'Moose',
+    accountBirthday: new Date(1647711841),
+    friends: [1, 2],
+    posts: [0, 3, 6],
+    comments: [],
+    likedPosts: [5],
+    dislikedPosts: [1, 7],
+    likedComments: [],
+    dislikedComments: [],
+  },
+  {
+    id: 1,
+    name: 'Kevin Fields',
+    bio: 'Kevin F',
+    accountBirthday: new Date(1647711842),
+    friends: [0],
+    posts: [1, 4, 7],
+    comments: [],
+    likedPosts: [],
+    dislikedPosts: [0, 3],
+    likedComments: [],
+    dislikedComments: [],
+  },
+  {
+    id: 2,
+    name: 'Albert McCarthy',
+    bio: 'Al',
+    accountBirthday: new Date(1647711843),
+    friends: [0],
+    posts: [2, 5, 8],
+    comments: [],
+    likedPosts: [0],
+    dislikedPosts: [1],
+    likedComments: [],
+    dislikedComments: [],
+  }
+];
+
+let posts = [
+  {
+    id: 0,
+    pId: 0,
+    pName: 'Moose Marshall',
+    text: 'This website sucks',
+    likes: [2],
+    dislikes: [1],
+    comments: [],
+  },
+  {
+    id: 1,
+    pId: 1,
+    pName: 'Kevin Fields',
+    text: 'Due to harassment about my website, I am debating removing it',
+    likes: [],
+    dislikes: [0, 2],
+    comments: [],
+  },
+  {
+    id: 2,
+    pId: 2,
+    pName: 'Albert McCarthy',
+    text: 'Heard the owner might be shutting down this website.',
+    likes: [0],
+    dislikes: [],
+    comments: [],
+  },
+  {
+    id: 3,
+    pId: 0,
+    pName: 'Moose Marshall',
+    text: 'Heard this website is finally getting taken down',
+    likes: [],
+    dislikes: [1],
+    comments: [],
+  },
+  {
+    id: 4,
+    pId: 1,
+    pName: 'Kevin Fields',
+    text: "What don't you like about my website?",
+    likes: [],
+    dislikes: [],
+    comments: [],
+  },
+  {
+    id: 5,
+    pId: 2,
+    pName: 'Albert McCarthy',
+    text: 'Well for one we have to reply by making new posts',
+    likes: [0],
+    dislikes: [],
+    comments: [],
+  },
+  {
+    id: 6,
+    pId: 0,
+    pName: 'Moose Marshall',
+    text: 'Yeah just add comments',
+    likes: [2],
+    dislikes: [],
+    comments: [],
+  },
+  {
+    id: 7,
+    pId: 1,
+    pName: 'Kevin Fields',
+    text: "It's really hard they have to be seperate objects that descend from the post",
+    likes: [],
+    dislikes: [0],
+    comments: [],
+  },
+  {
+    id: 8,
+    pId: 2,
+    pName: 'Albert McCarthy',
+    text: 'boo hoo',
+    likes: [],
+    dislikes: [],
+    comments: [],
+  }
+]
+
+const userType = new GraphQLObjectType({
+  name: 'User',
+  description: 'This represents a user',
+  fields: () => ({
+    id: {type: GraphQLNonNull(GraphQLInt)},
+    name: {type: GraphQLNonNull(GraphQLString)},
+    accountBirthday: {type: GraphQLNonNull(GraphQLInt)},
+    bio: {type: GraphQLString},
+    friends: {
+      type: new GraphQLList(userType),
+      resolve: (user) => users.filter(u => u.friends.includes(user.id))
+    },
+    posts: {
+      type: new GraphQLList(postType),
+      resolve: (user) => posts.filter(post => post.pId === user.id)
+    },
+    // comments: {
+    //   type: new GraphQLList(commentType),
+
+    // },
+    likedPosts: {
+      type: new GraphQLList(GraphQLInt),
+      resolve: (user) => posts.filter(post => post.likes.includes(user.id))
+    },
+    dislikedPosts: {
+      type: new GraphQLList(GraphQLInt),
+      resolve: (user) => posts.filter(post => post.dislikes.includes(user.id))
+    },
+    // likedComments: {
+
+    // },
+    // dislikedComments: {
+
+    // }
+
+  })
+})
+const postType = new GraphQLObjectType({
+  name: 'Post',
+  description: 'This represents a post',
+  fields: () => ({
+    id: {type: GraphQLNonNull(GraphQLInt)},
+    pId: {type: GraphQLNonNull(GraphQLInt)},
+    // pName: {type: GraphQLNonNull(GraphQLString)},
+    text: {type: GraphQLNonNull(GraphQLString)},
+    poster: {
+      type: userType,
+      resolve: (post) => {
+        return users.find(u => u.id === post.pId);
+      }
+    },
+    likes: {
+      type: GraphQLList(GraphQLInt),
+      resolve: (post) => {
+        let catcher = [];
+        for (let i=0; i<users.length; i++) {
+          if (users[i].likedPosts.includes(post.id)) {
+            catcher.push(users[i].id)
+          }
+        }
+        return catcher;
+      }
+    },
+    dislikes: {
+      type: GraphQLList(GraphQLInt),
+      resolve: (post) => {
+        let catcher = [];
+        for (const u of users) {
+          if (u.dislikedPosts.includes(post.id)) {
+            catcher.push(u.id);
+          }
+        }
+        return catcher;
+      }
+    },
+    //comments :{
+    //  type: GraphQLList(commentType)  
+    //}
+  })
+})
+
+const RootQueryType = new GraphQLObjectType({
+  name: 'Query',
+  description: 'Root Query',
+  fields: () => ({
+    post: {
+      type: postType,
+      description: 'A single post',
+      args: {
+        id: {type: GraphQLInt},
+      },
+      resolve: (parents, args) => posts.find(post => post.id === args.id)
+    },
+    allPosts: {
+      type: GraphQLList(postType),
+      description: 'All Posts',
+      resolve:() => posts
+    },
+    user: {
+      type: userType,
+      description: 'A single user',
+      args: {
+        id: {type: GraphQLInt},
+      },
+      resolve: (parent, args) => users.find(user => user.id === args.id)
+    },
+    allUsers: {
+      type: GraphQLList(userType),
+      description: 'All Users',
+      resolve: () => users
+    }
+  })
+})
+
+const RootMutationType = new GraphQLObjectType({
+  name: 'Mutation',
+  description: 'Root Mutation',
+  fields: () => ({
+    createPost: {
+      type: postType,
+      description: 'Add a post',
+      args: {
+        pId: {type: GraphQLNonNull(GraphQLInt)},
+        pName: {type: GraphQLNonNull(GraphQLString)},
+        text: {type: GraphQLNonNull(GraphQLString)},
+      },
+      resolve: (parents, args) => {
+        let post = {
+          id: posts.length,
+          pId: args.pId,
+          pName: args.pName,
+          text: args.text,
+          likes: [],
+          dislikes: [],
+          comments: [],
+        }
+        posts.push(post);
+        return post;
+      }
+    },
+    likePost: {
+      type: postType,
+      description: 'Like a post',
+      args: {
+        id: {type: GraphQLInt},
+        postId: {type: GraphQLInt},
+      },
+      resolve: (parents, args) => {
+        let catcher = posts.splice(args.postId, 1);
+        catcher = {
+          ...catcher,
+          likes: [...catcher.likes, args.id]
+        };
+        posts.splice(args.postId, 0, catcher);
+        return catcher;
+      }
+    }
+  })
+})
+
+const schema = new GraphQLSchema({
+  query: RootQueryType,
+  mutation: RootMutationType,
+})
+
+app.use('/graphql', expressGraphQL({
+  schema: schema,
+  graphiql: true
+}))
+app.listen(9001, () => console.log('Server is running'));
