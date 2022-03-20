@@ -295,7 +295,54 @@ const RootMutationType = new GraphQLObjectType({
         posts.splice(args.postId, 0, catcher);
         return catcher;
       }
-    }
+    },
+    dislikePost: {
+      type: postType,
+      description: 'Dislike a post',
+      args: {
+        id: {type: GraphQLInt},
+        postId: {type: GraphQLInt},
+      },
+      resolve: (parents, args) => {
+        let catcher = posts.splice(args, postId, 1);
+        catcher = {
+          ...catcher,
+          dislikes: [...catcher.dislikes, args.id]
+        };
+        posts.splice(args.postId, 0, catcher);
+        return catcher;
+      }
+    },
+    addFriend: {
+      type: userType,
+      description: 'Add a friend',
+      args: {
+        id: {type: GraphQLNonNull(GraphQLInt)},
+        friendId: {type: GraphQLNonNull(GraphQLInt)},
+      },
+      resolve: (parents, args) => {
+        let user = users[args.id];
+        user.friends = [...user.friends, args.friendId];
+        let friend = users[args.friendId];
+        friend.friends = [...friend.friends, args.id];
+        return friend;
+      }
+    },
+    removeFriend: {
+      type: userType,
+      description: 'Remove a friend',
+      args: {
+        id: {type: GraphQLNonNull(GraphQLInt)},
+        friendId: {type: GraphQLNonNull(GraphQLInt)},
+      },
+      resolve: (parents, args) => {
+        let user = users[args.id];
+        user.friends.filter(friend => friend.id !== args.friendId);
+        let friend = users[args.friendId];
+        friend.friends.filter(f => f.id !== args.id);
+        return friend;
+      }
+    },  
   })
 })
 
@@ -309,3 +356,4 @@ app.use('/graphql', expressGraphQL({
   graphiql: true
 }))
 app.listen(9001, () => console.log('Server is running'));
+
