@@ -322,7 +322,7 @@ const commentType = new GraphQLObjectType({
       type: new GraphQLList(userType),
       resolve: (comment) => {
         let catcher = users.filter((u) =>
-          u.dislikedComments.includes(comment.id)
+          u.dislikedComments.includes(comment)
           );
           return catcher;
         },
@@ -474,10 +474,23 @@ const RootMutationType = new GraphQLObjectType({
       },
       resolve: (parents, args) => {
         let comment = posts[args.pId].comments[args.cId];
-        // comment.likes.push(users[args.uId]);
         users[args.uId].likedComments.push(comment);
         return comment;
       }
+    },
+    dislikeComment: {
+      type: commentType,
+      description: 'Dislike a comment',
+      args: {
+        uId: { type: new GraphQLNonNull(GraphQLInt) },
+        pId: { type: new GraphQLNonNull(GraphQLInt) },
+        cId: { type: new GraphQLNonNull(GraphQLInt) },
+      },
+      resolve: (parents, args) => {
+        let comment = posts[args.pId].comments[args.cId];
+        users[args.uId].dislikedComments.push(comment);
+        return comment;
+      } 
     }
   }),
 });
