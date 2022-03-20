@@ -19,11 +19,11 @@ const users = [
     name: "Moose Marshall",
     bio: "Moose",
     accountBirthday: new Date(1647711841),
-    friends: [1, 2],
-    posts: [0, 3, 6],
+    friends: [],
+    posts: [],
     comments: [],
-    likedPosts: [5],
-    dislikedPosts: [1, 7],
+    likedPosts: [],
+    dislikedPosts: [],
     likedComments: [],
     dislikedComments: [],
   },
@@ -236,13 +236,11 @@ const postType = new GraphQLObjectType({
   name: "Post",
   description: "This represents a post",
   fields: () => ({
-    id: { type: new GraphQLNonNull(GraphQLInt) },
-    uId: {
+    id: { 
       type: new GraphQLNonNull(GraphQLInt),
-      resolve: (post) => {
-        return users.find((u) => u.posts.includes(post)).id;
-      },
-    },
+      resolve: (post) => posts.indexOf(post)
+     },
+    uId: { type: new GraphQLNonNull(GraphQLInt) },
     text: { type: new GraphQLNonNull(GraphQLString) },
     time: { type: new GraphQLNonNull(GraphQLString) },
     poster: {
@@ -256,7 +254,7 @@ const postType = new GraphQLObjectType({
       resolve: (post) => {
         let catcher = [];
         for (let i = 0; i < users.length; i++) {
-          if (users[i].likedPosts.includes(post.id)) {
+          if (users[i].likedPosts.includes(post)) {
             catcher.push(users[i]);
           }
         }
@@ -264,7 +262,7 @@ const postType = new GraphQLObjectType({
       },
     },
     dislikes: {
-      type: new GraphQLList(GraphQLInt),
+      type: new GraphQLList(userType),
       resolve: (post) => {
         let catcher = [];
         for (const u of users) {
@@ -296,33 +294,33 @@ const commentType = new GraphQLObjectType({
   fields: () => ({
     uId: { type: new GraphQLNonNull(GraphQLInt) },
     pId: { type: new GraphQLNonNull(GraphQLInt) },
+    text: { type: new GraphQLNonNull(GraphQLString) },
     id: {
       type: new GraphQLNonNull(GraphQLInt),
       resolve: (comment) => {
-        return posts[comment.pId].length;
+        return posts[comment.pId].length === 0 ? posts[comment.pId].length : 0;
       },
     },
     time: { type: new GraphQLNonNull(GraphQLString) },
     uName: {
       type: GraphQLString,
       resolve: (comment) => {
-        return users[comment.uId];
+        return users[comment.uId].name;
       },
-      text: { type: new GraphQLNonNull(GraphQLString) },
-      likes: {
-        type: new GraphQLList(userType),
-        resolve: (comment) => {
-          let catcher = users.filter((u) =>
-            u.likedComments.includes(comment.id)
-          );
-          return catcher;
-        },
+    likes: {
+      type: new GraphQLList(userType),
+      resolve: (comment) => {
+        let catcher = users.filter((u) =>
+          u.likedComments.includes(comment.id)
+        );
+        return catcher;
       },
-      dislikes: {
-        type: new GraphQLList(userType),
-        resolve: (comment) => {
-          let catcher = users.filter((u) =>
-            u.dislikedComments.includes(comment.id)
+    },
+    dislikes: {
+      type: new GraphQLList(userType),
+      resolve: (comment) => {
+        let catcher = users.filter((u) =>
+          u.dislikedComments.includes(comment.id)
           );
           return catcher;
         },
@@ -397,13 +395,8 @@ const RootMutationType = new GraphQLObjectType({
         postId: { type: GraphQLInt },
       },
       resolve: (parents, args) => {
-        let catcher = posts.splice(args.postId, 1);
-        catcher = {
-          ...catcher,
-          likes: [...catcher.likes, args.id],
-        };
-        posts.splice(args.postId, 0, catcher);
-        return catcher;
+        users[args.id].likedPosts.push(posts[args.postId]);
+        return posts[args.postId];
       },
     },
     dislikePost: {
@@ -414,13 +407,8 @@ const RootMutationType = new GraphQLObjectType({
         postId: { type: GraphQLInt },
       },
       resolve: (parents, args) => {
-        let catcher = posts.splice(args, postId, 1);
-        catcher = {
-          ...catcher,
-          dislikes: [...catcher.dislikes, args.id],
-        };
-        posts.splice(args.postId, 0, catcher);
-        return catcher;
+        users[args.id].dislikedPosts.push(posts[args.postId]);
+        return posts[args.postId];
       },
     },
     addFriend: {
@@ -462,7 +450,17 @@ const RootMutationType = new GraphQLObjectType({
         text: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: (parents, args) => {
-        let comments;
+        let comment = {
+          pId: args.pId,
+          uId: args.uId,
+          text: args.text,
+          likes: [],
+          dislikes: [],
+          time: new Date(),
+        }
+        posts[args.pId].comments.push(comment);
+        comments.push(comment);
+        return comment;
       },
     },
   }),

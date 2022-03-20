@@ -73,15 +73,9 @@ const AllUsers = (props) => {
               addUser={(id, actually) => addUser(id, actually)}
               friends={friends.includes(user.id) ? true : false}
             />
-            {/*<p className="profile-link">
+            <p className="profile-link" onClick={props.onSelect(user.id)}>
               <Link to={`/all-users/${user.id}`}>Profile</Link>
             </p>
-            <Routes>
-              <Route
-                path={`/all-users/${user.id}`}
-                element={<OtherUser user={user} firestore={props.firestore} />}
-              />
-            </Routes>*/}
           </>
         ))}
     </div>

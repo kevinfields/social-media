@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Route, Routes, Link } from "react-router-dom";
 import UserProfile from "../pages/UserProfile";
 import SignIn from "../pages/SignIn";
@@ -6,8 +6,19 @@ import SignOut from "../pages/SignOut";
 import CreatePost from "../pages/CreatePost";
 import AllUsers from "../pages/AllUsers";
 import FriendRequests from "../pages/FriendRequests";
+import OtherUser from "../pages/OtherUser";
 
 const Navbar = (props) => {
+
+  const [user, setUser] = useState('');
+
+  const changeOtherUser = (id) => {
+    setUser(id);
+  }
+
+
+
+
   return (
     <div className="user-home-nav">
       <section className="nav-links">
@@ -53,8 +64,8 @@ const Navbar = (props) => {
             }
           />
           <Route
-            path="/all-users/*"
-            element={<AllUsers user={props.user} firestore={props.firestore} />}
+            path="/all-users"
+            element={<AllUsers user={props.user} firestore={props.firestore} onSelect={(id) => changeOtherUser(id)}/> }
           />
           <Route
             path="/friend-requests"
@@ -62,6 +73,9 @@ const Navbar = (props) => {
               <FriendRequests user={props.user} firestore={props.firestore} />
             }
           />
+          <Route
+            path={`/users/${user}`}
+            element={<OtherUser firestore={props.firestore} user={user} browser={props.user}/> } />
         </Routes>
       </section>
     </div>
