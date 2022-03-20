@@ -55,6 +55,54 @@ const users = [
   },
 ];
 
+let comments = [
+  {
+    id: 0,
+    pId: 0,
+    uId: 1,
+    text: "Here you go, this is a comment",
+    likes: [],
+    dislikes: [],
+    time: new Date(1647711943),
+  },
+  {
+    id: 1,
+    pId: 0,
+    uId: 0,
+    text: "ok",
+    likes: [],
+    dislikes: [],
+    time: new Date(1647712843),
+  },
+  {
+    id: 2,
+    pId: 0,
+    uId: 0,
+    text: "Here you go, this is a comment",
+    likes: [],
+    dislikes: [],
+    time: new Date(1647711843),
+  },
+  {
+    id: 3,
+    pId: 0,
+    uId: 2,
+    text: "Here you go, this is a comment",
+    likes: [],
+    dislikes: [],
+    time: new Date(1647711843),
+  },
+  {
+    id: 4,
+    pId: 0,
+    uId: 1,
+    text: "ow",
+    likes: [],
+    dislikes: [],
+    time: new Date(1647711843),
+  },
+];
+
 let posts = [
   {
     id: 0,
@@ -71,7 +119,7 @@ let posts = [
     text: "Due to harassment about my website, I am debating removing it",
     likes: [],
     dislikes: [],
-    comments: [],
+    comments: [comments[0], comments[1], comments[2], comments[3], comments[4]],
     time: new Date(1647711843),
   },
   {
@@ -135,54 +183,6 @@ let posts = [
     likes: [],
     dislikes: [],
     comments: [],
-    time: new Date(1647711843),
-  },
-];
-
-let comments = [
-  {
-    id: 0,
-    pId: 0,
-    uId: 1,
-    text: "Here you go, this is a comment",
-    likes: [],
-    dislikes: [],
-    time: new Date(1647711943),
-  },
-  {
-    id: 1,
-    pId: 0,
-    uId: 0,
-    text: "ok",
-    likes: [],
-    dislikes: [],
-    time: new Date(1647712843),
-  },
-  {
-    id: 2,
-    pId: 0,
-    uId: 0,
-    text: "Here you go, this is a comment",
-    likes: [],
-    dislikes: [],
-    time: new Date(1647711843),
-  },
-  {
-    id: 3,
-    pId: 0,
-    uId: 2,
-    text: "Here you go, this is a comment",
-    likes: [],
-    dislikes: [],
-    time: new Date(1647711843),
-  },
-  {
-    id: 4,
-    pId: 0,
-    uId: 1,
-    text: "ow",
-    likes: [],
-    dislikes: [],
     time: new Date(1647711843),
   },
 ];
@@ -297,21 +297,23 @@ const commentType = new GraphQLObjectType({
     text: { type: new GraphQLNonNull(GraphQLString) },
     id: {
       type: new GraphQLNonNull(GraphQLInt),
-      resolve: (comment) => {
-        return posts[comment.pId].length === 0 ? posts[comment.pId].length : 0;
-      },
+      resolve: (comment) => posts[comment.pId].comments.length
     },
-    time: { type: new GraphQLNonNull(GraphQLString) },
+    time: { 
+      type: new GraphQLNonNull(GraphQLString),
+      resolve: () => new Date()
+    },
     uName: {
       type: GraphQLString,
       resolve: (comment) => {
         return users[comment.uId].name;
       },
+    },
     likes: {
       type: new GraphQLList(userType),
       resolve: (comment) => {
         let catcher = users.filter((u) =>
-          u.likedComments.includes(comment.id)
+          u.likedComments.includes(comment)
         );
         return catcher;
       },
@@ -324,7 +326,6 @@ const commentType = new GraphQLObjectType({
           );
           return catcher;
         },
-      },
     },
   }),
 });
@@ -463,6 +464,21 @@ const RootMutationType = new GraphQLObjectType({
         return comment;
       },
     },
+    likeComment: {
+      type: commentType,
+      description: 'Like a comment',
+      args: {
+        uId: { type: new GraphQLNonNull(GraphQLInt)},
+        pId: { type: new GraphQLNonNull(GraphQLInt)},
+        cId: { type: new GraphQLNonNull(GraphQLInt)},
+      },
+      resolve: (parents, args) => {
+        let comment = posts[args.pId].comments[args.cId];
+        // comment.likes.push(users[args.uId]);
+        users[args.uId].likedComments.push(comment);
+        return comment;
+      }
+    }
   }),
 });
 
