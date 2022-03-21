@@ -58,7 +58,7 @@ const users = [
 let comments = [
   {
     id: 0,
-    pId: 0,
+    pId: 1,
     uId: 1,
     text: "Here you go, this is a comment",
     likes: [],
@@ -67,7 +67,7 @@ let comments = [
   },
   {
     id: 1,
-    pId: 0,
+    pId: 1,
     uId: 0,
     text: "ok",
     likes: [],
@@ -76,7 +76,7 @@ let comments = [
   },
   {
     id: 2,
-    pId: 0,
+    pId: 1,
     uId: 0,
     text: "Here you go, this is a comment",
     likes: [],
@@ -85,7 +85,7 @@ let comments = [
   },
   {
     id: 3,
-    pId: 0,
+    pId: 1,
     uId: 2,
     text: "Here you go, this is a comment",
     likes: [],
@@ -94,7 +94,7 @@ let comments = [
   },
   {
     id: 4,
-    pId: 0,
+    pId: 1,
     uId: 1,
     text: "ow",
     likes: [],
@@ -236,10 +236,10 @@ const postType = new GraphQLObjectType({
   name: "Post",
   description: "This represents a post",
   fields: () => ({
-    id: { 
+    id: {
       type: new GraphQLNonNull(GraphQLInt),
-      resolve: (post) => posts.indexOf(post)
-     },
+      resolve: (post) => posts.indexOf(post),
+    },
     uId: { type: new GraphQLNonNull(GraphQLInt) },
     text: { type: new GraphQLNonNull(GraphQLString) },
     time: { type: new GraphQLNonNull(GraphQLString) },
@@ -297,11 +297,11 @@ const commentType = new GraphQLObjectType({
     text: { type: new GraphQLNonNull(GraphQLString) },
     id: {
       type: new GraphQLNonNull(GraphQLInt),
-      resolve: (comment) => posts[comment.pId].comments.length
+      resolve: (comment) => posts[comment.pId].comments.indexOf(comment),
     },
-    time: { 
+    time: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: () => new Date()
+      resolve: () => new Date(),
     },
     uName: {
       type: GraphQLString,
@@ -312,20 +312,16 @@ const commentType = new GraphQLObjectType({
     likes: {
       type: new GraphQLList(userType),
       resolve: (comment) => {
-        let catcher = users.filter((u) =>
-          u.likedComments.includes(comment)
-        );
+        let catcher = users.filter((u) => u.likedComments.includes(comment));
         return catcher;
       },
     },
     dislikes: {
       type: new GraphQLList(userType),
       resolve: (comment) => {
-        let catcher = users.filter((u) =>
-          u.dislikedComments.includes(comment)
-          );
-          return catcher;
-        },
+        let catcher = users.filter((u) => u.dislikedComments.includes(comment));
+        return catcher;
+      },
     },
   }),
 });
@@ -452,13 +448,14 @@ const RootMutationType = new GraphQLObjectType({
       },
       resolve: (parents, args) => {
         let comment = {
+          id: posts[args.pId].comments.length,
           pId: args.pId,
           uId: args.uId,
           text: args.text,
           likes: [],
           dislikes: [],
           time: new Date(),
-        }
+        };
         posts[args.pId].comments.push(comment);
         comments.push(comment);
         return comment;
@@ -466,21 +463,21 @@ const RootMutationType = new GraphQLObjectType({
     },
     likeComment: {
       type: commentType,
-      description: 'Like a comment',
+      description: "Like a comment",
       args: {
-        uId: { type: new GraphQLNonNull(GraphQLInt)},
-        pId: { type: new GraphQLNonNull(GraphQLInt)},
-        cId: { type: new GraphQLNonNull(GraphQLInt)},
+        uId: { type: new GraphQLNonNull(GraphQLInt) },
+        pId: { type: new GraphQLNonNull(GraphQLInt) },
+        cId: { type: new GraphQLNonNull(GraphQLInt) },
       },
       resolve: (parents, args) => {
         let comment = posts[args.pId].comments[args.cId];
         users[args.uId].likedComments.push(comment);
         return comment;
-      }
+      },
     },
     dislikeComment: {
       type: commentType,
-      description: 'Dislike a comment',
+      description: "Dislike a comment",
       args: {
         uId: { type: new GraphQLNonNull(GraphQLInt) },
         pId: { type: new GraphQLNonNull(GraphQLInt) },
@@ -490,8 +487,8 @@ const RootMutationType = new GraphQLObjectType({
         let comment = posts[args.pId].comments[args.cId];
         users[args.uId].dislikedComments.push(comment);
         return comment;
-      } 
-    }
+      },
+    },
   }),
 });
 

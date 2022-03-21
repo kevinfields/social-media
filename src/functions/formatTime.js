@@ -9,7 +9,6 @@ export default function formatTime(s) {
   let newStr = arr.join("");
 
   let x = Number(newStr);
-  console.log(x);
   let time = new Date(x).toLocaleString("en-US", { timeZone: "CST" });
 
   let briefArr = time.split("");

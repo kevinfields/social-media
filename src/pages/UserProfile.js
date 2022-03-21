@@ -4,15 +4,46 @@ import formatTime from "../functions/formatTime";
 import Post from "../components/Post";
 
 const UserProfile = (props) => {
-  console.table(props);
-
-  const postsRef = props.firestore
-    .collection("users")
-    .doc(props.user.uid)
-    .collection("posts");
+  const [userData, setUserData] = useState({});
+  //const postsRef = props.firestore
+  //  .collection("users")
+  //  .doc(props.user.uid)
+  //  .collection("posts");
+  const userRef = props.firestore.collection("users").doc(props.user.uid);
+  const postsRef = userRef.collection("posts");
   const query = postsRef.orderBy("createdAt", "desc");
   const [posts] = useCollectionData(query, { idField: "id" });
 
+  const getProfileData = async () => {
+    let data;
+    await userRef.get().then((doc) => {
+      data = doc.data();
+    });
+    setUserData(data);
+    if (data === undefined || data === null) {
+      await userRef.set({
+        id: props.user.uid,
+        accountBirthday: new Date(),
+        name: props.user.displayName,
+        photoURL: props.user.photoURL,
+        postCount: 0,
+        commentCount: 0,
+        bio: "",
+        friends: [],
+        likedPosts: [],
+        dislikedPosts: [],
+        likedComments: [],
+        dislikedComments: [],
+        requests: [],
+      });
+    }
+    console.log(JSON.stringify(data));
+  };
+
+  useEffect(() => {
+    getProfileData();
+    // eslint-disable-next-line
+  }, []);
   //  useEffect(() => {
   //    getPosts();
   //  }, []);
@@ -48,7 +79,11 @@ const UserProfile = (props) => {
       <p id="user-profile-account-created" className="user-profile-details">
         Account Created: {formatTime(props.user.metadata.a)}
       </p>
-      
+      {userData ? (
+        <p id="user-profile-biography" className="user-profile-details">
+          Biography: {userData.bio}
+        </p>
+      ) : null}
       <section id="user-profile-user-posts">
         {posts &&
           posts.map((post) => (

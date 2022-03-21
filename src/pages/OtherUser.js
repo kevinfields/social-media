@@ -25,8 +25,14 @@ const OtherUser = (props) => {
       <p id="user-profile-id-header" className="user-profile-details">
         User ID: {props.user.id}
       </p>
+      <p id="user-profile-last-sign-in" className="user-profile-details">
+        Offline
+      </p>
       <p id="user-profile-account-created" className="user-profile-details">
-        Account Created: {formatTime(props.user.accountBirthday)}
+        Account Created: {formatTime(props.user.accountBirthday.seconds * 1000)}
+      </p>
+      <p id="user-profile-biography" className="user-profile-details">
+        Biography: {props.user.bio}
       </p>
       <section id="user-profile-user-posts">
         {posts &&

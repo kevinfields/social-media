@@ -1,13 +1,9 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import { Route, Routes } from "react-router-dom";
 import SignIn from "./pages/SignIn";
-import SignOut from "./pages/SignOut";
-import UserProfile from "./pages/UserProfile";
 import Navbar from "./components/Navbar";
 
 firebase.initializeApp({
@@ -24,6 +20,29 @@ const firestore = firebase.firestore();
 
 function App() {
   const [user] = useAuthState(auth);
+
+  //const retrieve = async () => {
+  //  let userRef = firestore.collection("users").doc(user.uid);
+  //  await userRef.get().then((doc) => {
+  //    if (doc) {
+  //      return;
+  //    } else {
+  //      firestore.collection("users").add({
+  //        id: user.uid,
+  //        accountBirthday: new Date(),
+  //        name: user.displayName,
+  //        commentCount: 0,
+  //        postCount: 0,
+  //        bio: "",
+  //        friends: 0,
+  //        commentLikes: 0,
+  //        commentDislikes: 0,
+  //        postLikes: 0,
+  //        postDislikes: 0,
+  //      });
+  //    }
+  //  });
+  //};
 
   return (
     <div className="App">

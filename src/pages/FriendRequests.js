@@ -16,7 +16,6 @@ const FriendRequests = (props) => {
   };
 
   getData().then(() => {
-    console.table(data);
     setRequests([...data.requests]);
   });
 

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { Link } from "react-router-dom";
 import UserTab from "../components/UserTab";
-import OtherUser from "./OtherUser";
-import { Route, Routes } from "react-router-dom";
 
 const AllUsers = (props) => {
   const usersRef = props.firestore.collection("users");
@@ -24,6 +22,7 @@ const AllUsers = (props) => {
 
   useEffect(() => {
     getFriends();
+    // eslint-disable-next-line
   }, [friends]);
 
   const addUser = async (id, actually) => {
@@ -59,13 +58,17 @@ const AllUsers = (props) => {
       ...data,
       friends: friendsList,
     });
+    await usersRef.doc(id).set({
+      ...friendData,
+      requests: requestList,
+    });
   };
 
   return (
     <div className="all-users-page">
       {users &&
         users.map((user) => (
-          <>
+          <div key={user.id}>
             <UserTab
               user={user}
               viewer={props.user.uid}
@@ -75,7 +78,7 @@ const AllUsers = (props) => {
             <p className="profile-link" onClick={() => props.onSelect(user)}>
               <Link to={`/all-users/${user.id}`}>Profile</Link>
             </p>
-          </>
+          </div>
         ))}
     </div>
   );

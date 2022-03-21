@@ -114,6 +114,10 @@ button {
 }
 
 #user-profile-total-posts {
+  top: 40vh;
+}
+
+#user-profile-biography {
   top: 37vh;
 }
 
@@ -182,6 +186,17 @@ button {
   padding: 0.5vw;
 }
 
+.user-tab-id {
+  position: relative;
+  bottom: 2vh;
+  font-size: 6pt;
+}
+
+.user-tab-name {
+  position: relative;
+  bottom: 2vh;
+  font-size: 15pt;
+}
 .user-tab-image-wrapper {
   width: 6vw;
   height: 6vw;
@@ -198,21 +213,21 @@ button {
 
 .user-tab-add-friend-button {
   position: relative;
-  left: 10vw;
+  left: 15vw;
   bottom: 18vh;
   height: 4vh;
 }
 
 .user-tab-remove-friend-button {
   position: relative;
-  left: 10vw;
+  left: 15vw;
   bottom: 18vh;
   height: 4vh;
 }
 
 .profile-link {
   position: relative;
-  top: 1vh;
+  top: 3vh;
   font-size: 8pt;
 }
 

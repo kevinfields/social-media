@@ -1,7 +1,6 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Route, Routes, Link } from "react-router-dom";
 import UserProfile from "../pages/UserProfile";
-import SignIn from "../pages/SignIn";
 import SignOut from "../pages/SignOut";
 import CreatePost from "../pages/CreatePost";
 import AllUsers from "../pages/AllUsers";
@@ -9,13 +8,11 @@ import FriendRequests from "../pages/FriendRequests";
 import OtherUser from "../pages/OtherUser";
 
 const Navbar = (props) => {
-
-  const [user, setUser] = useState('');
+  const [user, setUser] = useState("");
 
   const changeOtherUser = (u) => {
     setUser(u);
-    console.log(u);
-  }
+  };
 
   return (
     <div className="user-home-nav">
@@ -62,8 +59,15 @@ const Navbar = (props) => {
             }
           />
           <Route
-            exact path="/all-users"
-            element={<AllUsers user={props.user} firestore={props.firestore} onSelect={(u) => changeOtherUser(u)}/> }
+            exact
+            path="/all-users"
+            element={
+              <AllUsers
+                user={props.user}
+                firestore={props.firestore}
+                onSelect={(u) => changeOtherUser(u)}
+              />
+            }
           />
           <Route
             path="/friend-requests"
@@ -73,7 +77,14 @@ const Navbar = (props) => {
           />
           <Route
             path={`/all-users/${user.id}`}
-            element={<OtherUser firestore={props.firestore} user={user} browser={props.user}/> } />
+            element={
+              <OtherUser
+                firestore={props.firestore}
+                user={user}
+                browser={props.user}
+              />
+            }
+          />
         </Routes>
       </section>
     </div>
