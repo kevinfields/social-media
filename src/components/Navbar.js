@@ -12,12 +12,10 @@ const Navbar = (props) => {
 
   const [user, setUser] = useState('');
 
-  const changeOtherUser = (id) => {
-    setUser(id);
+  const changeOtherUser = (u) => {
+    setUser(u);
+    console.log(u);
   }
-
-
-
 
   return (
     <div className="user-home-nav">
@@ -64,8 +62,8 @@ const Navbar = (props) => {
             }
           />
           <Route
-            path="/all-users"
-            element={<AllUsers user={props.user} firestore={props.firestore} onSelect={(id) => changeOtherUser(id)}/> }
+            exact path="/all-users"
+            element={<AllUsers user={props.user} firestore={props.firestore} onSelect={(u) => changeOtherUser(u)}/> }
           />
           <Route
             path="/friend-requests"
@@ -74,7 +72,7 @@ const Navbar = (props) => {
             }
           />
           <Route
-            path={`/users/${user}`}
+            path={`/all-users/${user.id}`}
             element={<OtherUser firestore={props.firestore} user={user} browser={props.user}/> } />
         </Routes>
       </section>

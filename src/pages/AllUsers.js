@@ -54,7 +54,6 @@ const AllUsers = (props) => {
       friendsList = friendsList.filter((friend) => friend !== id);
       requestList = requestList.filter((request) => request !== props.user.uid);
     }
-    console.table(friendsList);
 
     await usersRef.doc(props.user.uid).set({
       ...data,
@@ -73,7 +72,7 @@ const AllUsers = (props) => {
               addUser={(id, actually) => addUser(id, actually)}
               friends={friends.includes(user.id) ? true : false}
             />
-            <p className="profile-link" onClick={props.onSelect(user.id)}>
+            <p className="profile-link" onClick={() => props.onSelect(user)}>
               <Link to={`/all-users/${user.id}`}>Profile</Link>
             </p>
           </>
