@@ -11,7 +11,7 @@ const OtherUser = (props) => {
   const query = postsRef.orderBy("createdAt", "desc");
   const [posts] = useCollectionData(query, { idField: "id" });
 
-  const likePost = async (user, id, dir) => {
+  const likePost = async (user, id) => {
     let data;
 
     await postsRef
@@ -64,11 +64,11 @@ const OtherUser = (props) => {
               createdAt={post.createdAt}
               postId={post.id}
               key={post.id}
-              comments={post.comments}
               likes={post.likes}
               dislikes={post.dislikes}
               likeStatus={post.likes.includes(props.browser.uid)}
               onLike={() => likePost(props.browser, post.id)}
+              commentRef={postsRef.doc(post.id).collection('comments')}
             />
           ))}
       </section>

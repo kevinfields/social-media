@@ -93,9 +93,9 @@ const UserProfile = (props) => {
               createdAt={post.createdAt}
               postId={post.id}
               key={post.id}
-              comments={post.comments}
               likes={post.likes}
               dislikes={post.dislikes}
+              commentRef={postsRef.doc(post.id).collection('comments')}
             />
           ))}
       </section>

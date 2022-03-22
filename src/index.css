@@ -252,3 +252,26 @@ button {
   border: 1px solid black;
   z-index: 0;
 }
+
+.comment {
+  position: relative;
+  border: 1px solid black;
+  padding-left: 1vw;
+  padding-top: 0px;
+}
+
+.comment-text {
+  font-size: 12pt;
+}
+
+.comment-poster {
+  font-size: 10pt;
+  margin-bottom: 0.5vh;
+}
+
+.comment-time {
+  font-size: 8pt;
+  position: relative;
+  margin-bottom: 0.5vh;
+
+}

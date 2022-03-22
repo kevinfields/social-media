@@ -1,8 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import formatTime from "../functions/formatTime";
+import Comment from "./Comment";
 
 const Post = (props) => {
-  console.log(JSON.stringify(props));
+
+  const [coms, setComs] = useState([]);
+  let comments = [];
+  const getComments = async () => {
+    await props.commentRef.get().then(snap => {
+      snap.forEach(doc => {
+        comments.push(doc.data())
+        console.log('comments: ' + JSON.stringify(comments))
+      })
+    });
+  }
+
+  useEffect(() => {
+    getComments().then(() => {
+      setComs(comments)
+    });
+  }, [])
   return (
     <div className="post">
       <p>{props.text}</p>
@@ -15,12 +32,9 @@ const Post = (props) => {
         <button onClick={() => props.onLike()}>Like</button>
       ) : null}
       <p>Likes: {props.likes ? props.likes.length : 0}</p>
-      {props.comments !== undefined
-        ? props.comments.map((c) => (
-            <section className="comment">
-              <p className="comment-text">{c.text}</p>
-              <p className="comment-poster">{c.poster}</p>
-            </section>
+      {coms.length > 0 ?
+        coms.map((c) => (
+          <Comment text={c.text} poster={c.author} time={formatTime(c.createdAt.seconds + '000')} />
           ))
         : null}
     </div>
