@@ -8,6 +8,9 @@ const Post = (props) => {
       <p>
         - {props.user} - {formatTime(props.createdAt.seconds + "000")}
       </p>
+      {
+        <button onClick={() => props.onLike()}>Like</button>
+      }
     </div>
   );
 };

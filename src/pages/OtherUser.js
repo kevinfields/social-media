@@ -11,6 +11,18 @@ const OtherUser = (props) => {
   const query = postsRef.orderBy("createdAt", "desc");
   const [posts] = useCollectionData(query, { idField: "id" });
 
+  const likePost = async (user, id) => {
+
+    let data;
+
+    await postsRef.doc.get().then(doc => data = doc.data());
+
+    await postsRef.doc(id).set({
+      ...data,
+      likes: [...data.likes, user.uid]
+    })
+  }
+
   return (
     <div className="o-u-profile">
       <p id="user-profile-name-header">{props.user.name}</p>
@@ -46,6 +58,7 @@ const OtherUser = (props) => {
               comments={post.comments}
               likes={post.likes}
               dislikes={post.dislikes}
+              onLike={() => likePost(props.browser, post.id)}
             />
           ))}
       </section>
