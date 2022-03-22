@@ -95,6 +95,8 @@ const UserProfile = (props) => {
               key={post.id}
               likes={post.likes}
               dislikes={post.dislikes}
+              browser={props.user.displayName}
+              userRef={userRef}
               commentRef={postsRef.doc(post.id).collection('comments')}
             />
           ))}

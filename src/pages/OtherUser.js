@@ -8,6 +8,7 @@ const OtherUser = (props) => {
     .collection("users")
     .doc(props.user.id)
     .collection("posts");
+  const userRef = props.firestore.collection('users').doc(props.browser.uid);
   const query = postsRef.orderBy("createdAt", "desc");
   const [posts] = useCollectionData(query, { idField: "id" });
 
@@ -66,8 +67,10 @@ const OtherUser = (props) => {
               key={post.id}
               likes={post.likes}
               dislikes={post.dislikes}
+              browser={props.browser.displayName}
               likeStatus={post.likes.includes(props.browser.uid)}
               onLike={() => likePost(props.browser, post.id)}
+              userRef={userRef}
               commentRef={postsRef.doc(post.id).collection('comments')}
             />
           ))}

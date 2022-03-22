@@ -10,9 +10,41 @@ const Post = (props) => {
     await props.commentRef.get().then(snap => {
       snap.forEach(doc => {
         comments.push(doc.data())
-        console.log('comments: ' + JSON.stringify(comments))
       })
     });
+  }
+
+  const addComment = async () => {
+
+    const text = prompt('Write a comment')
+
+    let data;
+    let id;
+
+    await props.commentRef.add({
+      author: props.browser,
+      createdAt: new Date(),
+      likes: [],
+      dislikes: [],
+      text: text,
+    }).then(() => {
+      getComments().then(() => {
+        setComs(comments);
+      })
+    });
+
+    await props.userRef.get().then((doc) => {
+      data = doc.data();
+    });
+
+    console.log(JSON.stringify(data));
+    await props.userRef.set({
+        ...data,
+        comments: data.comments.concat(comments[comments.length - 1].id)
+    })
+  
+   
+
   }
 
   useEffect(() => {
@@ -37,6 +69,9 @@ const Post = (props) => {
           <Comment text={c.text} poster={c.author} time={formatTime(c.createdAt.seconds + '000')} />
           ))
         : null}
+        <button className='add-comment-button' onClick={() => addComment()}>
+          Add Comment
+        </button>
     </div>
   );
 };
