@@ -18,7 +18,6 @@ const AllUsers = (props) => {
         data = doc.data();
       });
     setFriends([...data.friends]);
-    console.log("loop");
   };
 
   useEffect(() => {
