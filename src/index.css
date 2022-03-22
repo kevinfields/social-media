@@ -220,14 +220,14 @@ button {
 .user-tab-add-friend-button {
   position: relative;
   left: 15vw;
-  bottom: 16vh;
+  bottom: 20vh;
   height: 4vh;
 }
 
 .user-tab-remove-friend-button {
   position: relative;
   left: 15vw;
-  bottom: 16vh;
+  bottom: 20vh;
   height: 4vh;
 }
 

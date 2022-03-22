@@ -18,12 +18,13 @@ const AllUsers = (props) => {
         data = doc.data();
       });
     setFriends([...data.friends]);
+    console.log("loop");
   };
 
   useEffect(() => {
     getFriends();
     // eslint-disable-next-line
-  }, [friends]);
+  }, []);
 
   const addUser = async (id, actually) => {
     let data;
@@ -62,6 +63,7 @@ const AllUsers = (props) => {
       ...friendData,
       requests: requestList,
     });
+    getFriends();
   };
 
   return (
