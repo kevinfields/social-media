@@ -11,17 +11,26 @@ const OtherUser = (props) => {
   const query = postsRef.orderBy("createdAt", "desc");
   const [posts] = useCollectionData(query, { idField: "id" });
 
-  const likePost = async (user, id) => {
-
+  const likePost = async (user, id, dir) => {
     let data;
 
-    await postsRef.doc.get().then(doc => data = doc.data());
+    await postsRef
+      .doc(id)
+      .get()
+      .then((doc) => (data = doc.data()));
 
-    await postsRef.doc(id).set({
-      ...data,
-      likes: [...data.likes, user.uid]
-    })
-  }
+    if (data.likes.includes(props.browser.uid)) {
+      await postsRef.doc(id).set({
+        ...data,
+        likes: data.likes.filter((like) => like !== user.uid),
+      });
+    } else {
+      await postsRef.doc(id).set({
+        ...data,
+        likes: data.likes.concat(user.uid),
+      });
+    }
+  };
 
   return (
     <div className="o-u-profile">
@@ -58,6 +67,7 @@ const OtherUser = (props) => {
               comments={post.comments}
               likes={post.likes}
               dislikes={post.dislikes}
+              likeStatus={post.likes.includes(props.browser.uid)}
               onLike={() => likePost(props.browser, post.id)}
             />
           ))}

@@ -16,6 +16,9 @@ const CreatePost = (props) => {
         text: text,
         createdAt: new Date(),
         uid: props.user.uid,
+        likes: [],
+        dislikes: [],
+        comments: [],
       })
       .then(() => {
         setText("");
