@@ -231,6 +231,12 @@ button {
   height: 4vh;
 }
 
+.user-tab-self-identifier {
+  font-size: 6pt;
+  position: absolute;
+  left: 5vw;
+}
+
 .profile-link {
   position: relative;
   top: 3vh;

@@ -15,7 +15,14 @@ const Post = (props) => {
         <button onClick={() => props.onLike()}>Like</button>
       ) : null}
       <p>Likes: {props.likes ? props.likes.length : 0}</p>
-      <p>Dislikes: {props.dislikes ? props.dislikes.length : 0}</p>
+      {props.comments !== undefined
+        ? props.comments.map((c) => (
+            <section className="comment">
+              <p className="comment-text">{c.text}</p>
+              <p className="comment-poster">{c.poster}</p>
+            </section>
+          ))
+        : null}
     </div>
   );
 };

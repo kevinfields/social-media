@@ -76,9 +76,15 @@ const AllUsers = (props) => {
               addUser={(id, actually) => addUser(id, actually)}
               friends={friends.includes(user.id) ? true : false}
             />
-            <p className="profile-link" onClick={() => props.onSelect(user)}>
-              <Link to={`/all-users/${user.id}`}>Profile</Link>
-            </p>
+            {user.id !== props.user.uid ? (
+              <p className="profile-link" onClick={() => props.onSelect(user)}>
+                <Link to={`/all-users/${user.id}`}>Profile</Link>
+              </p>
+            ) : (
+              <p className="profile-link" onClick={() => props.onSelect(user)}>
+                <Link to={`/user-profile`}>Profile</Link>
+              </p>
+            )}
           </div>
         ))}
     </div>
