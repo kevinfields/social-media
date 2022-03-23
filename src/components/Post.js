@@ -10,6 +10,7 @@ const Post = (props) => {
   let comments = [];
 
   const getComments = async () => {
+    if (props.commentRef) {
     await props.commentRef.get().then((snap) => {
       snap.forEach((doc) => {
         comments.push({
@@ -18,6 +19,7 @@ const Post = (props) => {
         });
       });
     });
+    }
   };
 
   const addComment = async (text) => {

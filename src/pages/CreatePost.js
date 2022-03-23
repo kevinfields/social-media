@@ -16,6 +16,7 @@ const CreatePost = (props) => {
         text: text,
         createdAt: new Date(),
         uid: props.user.uid,
+        author: props.user.displayName,
         likes: [],
         dislikes: [],
         comments: [],
