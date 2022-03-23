@@ -1,17 +1,50 @@
-import React from 'react'
-import formatTime from '../functions/formatTime'
+import React, { useState } from "react";
+import formatTime from "../functions/formatTime";
 
 const Comment = (props) => {
-  return (
-    <section className='comment'>
-      <p className='comment-text'>{props.comment.text}</p>
-      <p className='comment-poster'> - {props.comment.author}</p>
-      <p className='comment-time'>{formatTime(props.comment.createdAt.seconds + '000')}</p>
-      { props.comment.uid === props.browser.uid ?
-      <button className='comment-delete-button'>Delete</button>
-       : null }
-    </section>
-  )
-}
+  const [removed, setRemoved] = useState(false);
 
-export default Comment
+  if (props.comment.data.removed && !removed) {
+    setRemoved(true);
+  }
+  const onDelete = async (comment) => {
+    console.log("comment: " + JSON.stringify(comment));
+    let data;
+    await props.cRef
+      .doc(comment)
+      .get()
+      .then((doc) => {
+        data = doc.data();
+      });
+
+    await props.cRef.doc(comment).set({
+      ...data,
+      text: "comment removed",
+      likes: [],
+      dislikes: [],
+      removed: true,
+    });
+    setRemoved(true);
+  };
+  return (
+    <section className="comment">
+      <p className="comment-text">
+        {!removed ? props.comment.data.text : "comment removed"}
+      </p>
+      <p className="comment-poster"> - {props.comment.data.author}</p>
+      {/*<p className="comment-time">
+        {formatTime(props.comment.createdAt.seconds + "000")}
+      </p>*/}
+      {props.comment.data.uid === props.browser.uid && !removed ? (
+        <button
+          className="comment-delete-button"
+          onClick={() => onDelete(props.comment.id)}
+        >
+          Delete
+        </button>
+      ) : null}
+    </section>
+  );
+};
+
+export default Comment;
