@@ -3,42 +3,44 @@ import formatTime from "../functions/formatTime";
 import Comment from "./Comment";
 
 const Post = (props) => {
-
   const [coms, setComs] = useState([]);
   let comments = [];
+
   const getComments = async () => {
-    await props.commentRef.get().then(snap => {
-      snap.forEach(doc => {
-        comments.push(doc.data())
-      })
+    await props.commentRef.get().then((snap) => {
+      snap.forEach((doc) => {
+        comments.push({
+          data: doc.data(),
+          id: doc.id,
+        });
+      });
     });
-  }
+  };
 
   const addComment = async () => {
+    const text = prompt("Write a comment");
 
-    const text = prompt('Write a comment')
-
-    
-
-    await props.commentRef.add({
-      author: props.browser.displayName,
-      uid: props.browser.uid,
-      createdAt: new Date(),
-      likes: [],
-      dislikes: [],
-      text: text,
-    }).then(() => {
-      getComments().then(() => {
-        setComs(comments);
+    await props.commentRef
+      .add({
+        author: props.browser.displayName,
+        uid: props.browser.uid,
+        createdAt: new Date(),
+        likes: [],
+        dislikes: [],
+        text: text,
       })
-    });
-  }
+      .then(() => {
+        getComments().then(() => {
+          setComs(comments);
+        });
+      });
+  };
 
   useEffect(() => {
     getComments().then(() => {
-      setComs(comments)
+      setComs(comments);
     });
-  }, [])
+  }, []);
 
   return (
     <div className="post">
@@ -52,16 +54,22 @@ const Post = (props) => {
         <button onClick={() => props.onLike()}>Like</button>
       ) : null}
       <p>Likes: {props.likes ? props.likes.length : 0}</p>
-      {coms.length > 0 ?
-        coms.map((c) => (
-          <Comment comment={c} browser={props.browser}/>
+      {coms.length > 0
+        ? coms.map((c) => (
+            <Comment
+              comment={c}
+              browser={props.browser}
+              post={props.postId}
+              cRef={props.commentRef}
+            />
           ))
         : null}
-        <button className='add-comment-button' onClick={() => addComment()}>
-          Add Comment
-        </button>
+      <button className="add-comment-button" onClick={() => addComment()}>
+        Add Comment
+      </button>
     </div>
   );
 };
 
 export default Post;
+
