@@ -5,6 +5,7 @@ import SignOut from "../pages/SignOut";
 import CreatePost from "../pages/CreatePost";
 import AllUsers from "../pages/AllUsers";
 import FriendRequests from "../pages/FriendRequests";
+import MyFeed from "../pages/MyFeed";
 import OtherUser from "../pages/OtherUser";
 
 const Navbar = (props) => {
@@ -20,6 +21,11 @@ const Navbar = (props) => {
         <p>
           <Link className="nav-link" to="/sign-out">
             Sign Out
+          </Link>
+        </p>
+        <p>
+          <Link className='nav-link' to='/my-feed'>
+            My Feed
           </Link>
         </p>
         <p>
@@ -46,6 +52,7 @@ const Navbar = (props) => {
       <section>
         <Routes>
           <Route path="/sign-out" element={<SignOut auth={props.auth} />} />
+          <Route path='/my-feed' element={<MyFeed user={props.user} firestore={props.firestore} />} />
           <Route
             path="/user-profile"
             element={

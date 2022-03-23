@@ -10,6 +10,7 @@ const UserProfile = (props) => {
     bio: 'false',
     edit: ''
   })
+  const [count, setCount] = useState(0);
   //const postsRef = props.firestore
   //  .collection("users")
   //  .doc(props.user.uid)
@@ -26,6 +27,7 @@ const UserProfile = (props) => {
       data = doc.data();
     });
     setUserData(data);
+    setCount(data.friends.length);
     if (data === undefined || data === null) {
       await userRef.set({
         id: props.user.uid,
@@ -116,9 +118,14 @@ const UserProfile = (props) => {
         Account Created: {formatTime(props.user.metadata.a)}
       </p>
       {userData ? (
+        <>
         <p id="user-profile-biography" className="user-profile-details">
           Biography: {userData.bio}
         </p>
+        <p id='user-profile-friend-list' className='user-profile-details'>
+          Friends: {count}
+        </p>
+        </> 
       ) : null}
       <section id='profile-editor'>
         <button id='user-profile-edit-profile' className='user-profile-details' onClick={() => editUserData()}>Edit Profile</button>

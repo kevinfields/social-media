@@ -115,13 +115,16 @@ button {
 }
 
 #user-profile-total-posts {
-  top: 40vh;
+  top: 43vh;
 }
 
 #user-profile-biography {
   top: 37vh;
 }
 
+#user-profile-friend-list {
+  top: 40vh;
+}
 #user-profile-edit-profile {
   top: 70vh;
 }
@@ -344,4 +347,18 @@ button {
   position: relative;
   left: 5vw;
 
+}
+
+#main-feed {
+  position: fixed;
+  left: 15vw;
+  top: 23vh;
+  border: 1px solid black;
+  width: 70vw;
+  height: 62vh;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+  gap: 1vh;
+  padding-left: 1vw;
 }

@@ -71,6 +71,7 @@ const Post = (props) => {
               browser={props.browser}
               post={props.postId}
               cRef={props.commentRef}
+              key={props.postId + coms.indexOf(c)}
             />
           ))
         : null}
