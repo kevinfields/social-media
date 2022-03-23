@@ -14,9 +14,9 @@ button {
 }
 
 .App {
-  border: 2px solid black;
+  border: 2px solid rgb(85, 85, 85);
   border-radius: 5px;
-  box-shadow: 1px 1px 1px 1px black;
+  box-shadow: 2px 2px 2px 2px black;
   border-bottom-style: none;
   width: 72vw;
   height: 72vh;
@@ -120,6 +120,44 @@ button {
 
 #user-profile-biography {
   top: 37vh;
+}
+
+#user-profile-edit-profile {
+  top: 70vh;
+}
+
+#profile-editor {
+  position: fixed;
+  height: 30vh;
+  width: 20vw;
+  top: 46vh;
+  border: 1px solid black;
+}
+
+#user-profile-bio-editor {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+  position: relative;
+  top: 3.3vh;
+  left: 1vw;
+  height: 15vh;
+  width: 17vw;
+  text-align: start;
+}
+
+#user-profile-photo-editor {
+  position: fixed;
+  left: 16vw;
+  top: 50vh;
+  width: 15vw;
+
+}
+
+#user-profile-bio-edit-select {
+  position: fixed;
+  top: 46.5vh;
+  width: 9vw;
+  left: 16vw;
 }
 
 .post {
@@ -276,5 +314,34 @@ button {
   font-size: 8pt;
   position: relative;
   margin-bottom: 0.5vh;
+}
+
+.comment-delete-button {
+  position: relative;
+  left: 23vw;
+  bottom: 1vh;
+  width: 5vw;
+}
+
+.add-comment-screen{
+  border: 1px solid black;
+  padding: 1vh;
+}
+
+.add-comment-text {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+  width: 25vw;
+}
+
+.add-comment-button {
+  position: relative;
+  right: 25vw;
+  top: 3vh;
+}
+
+.stop-add-comment {
+  position: relative;
+  left: 5vw;
 
 }

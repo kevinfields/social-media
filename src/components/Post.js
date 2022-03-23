@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import formatTime from "../functions/formatTime";
 import Comment from "./Comment";
 
 const Post = (props) => {
+  const [current, setCurrent] = useState('');
+  const [open, setOpen] = useState(false);
+
   const [coms, setComs] = useState([]);
   let comments = [];
 
@@ -17,8 +20,7 @@ const Post = (props) => {
     });
   };
 
-  const addComment = async () => {
-    const text = prompt("Write a comment");
+  const addComment = async (text) => {
 
     await props.commentRef
       .add({
@@ -28,13 +30,21 @@ const Post = (props) => {
         likes: [],
         dislikes: [],
         text: text,
+        removed: false,
       })
       .then(() => {
         getComments().then(() => {
           setComs(comments);
         });
+        setCurrent('');
+        setOpen(false);
       });
   };
+
+  const cancelComment = () => {
+    setCurrent('');
+    setOpen(false);
+  }
 
   useEffect(() => {
     getComments().then(() => {
@@ -64,9 +74,16 @@ const Post = (props) => {
             />
           ))
         : null}
-      <button className="add-comment-button" onClick={() => addComment()}>
-        Add Comment
-      </button>
+      { !open ? <button onClick={() => setOpen(true)}>Add Comment</button> : null}
+      { open ?
+      <section className='add-comment-screen'>
+        <textarea className='add-comment-text' placeholder='write a comment' rows={3} value={current} onChange={(e) => setCurrent(e.target.value)} />
+        <button className="add-comment-button" onClick={() => addComment(current)}>
+          Post
+        </button>
+        <button className='stop-add-comment' onClick={() => cancelComment()}>Cancel</button>
+      </section>
+      : null}
     </div>
   );
 };
