@@ -18,11 +18,11 @@ const Post = (props) => {
 
     const text = prompt('Write a comment')
 
-    let data;
-    let id;
+    
 
     await props.commentRef.add({
-      author: props.browser,
+      author: props.browser.displayName,
+      uid: props.browser.uid,
       createdAt: new Date(),
       likes: [],
       dislikes: [],
@@ -32,19 +32,6 @@ const Post = (props) => {
         setComs(comments);
       })
     });
-
-    await props.userRef.get().then((doc) => {
-      data = doc.data();
-    });
-
-    console.log(JSON.stringify(data));
-    await props.userRef.set({
-        ...data,
-        comments: data.comments.concat(comments[comments.length - 1].id)
-    })
-  
-   
-
   }
 
   useEffect(() => {
@@ -52,6 +39,7 @@ const Post = (props) => {
       setComs(comments)
     });
   }, [])
+
   return (
     <div className="post">
       <p>{props.text}</p>
@@ -66,7 +54,7 @@ const Post = (props) => {
       <p>Likes: {props.likes ? props.likes.length : 0}</p>
       {coms.length > 0 ?
         coms.map((c) => (
-          <Comment text={c.text} poster={c.author} time={formatTime(c.createdAt.seconds + '000')} />
+          <Comment comment={c} browser={props.browser}/>
           ))
         : null}
         <button className='add-comment-button' onClick={() => addComment()}>

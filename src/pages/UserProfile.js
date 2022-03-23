@@ -89,13 +89,14 @@ const UserProfile = (props) => {
           posts.map((post) => (
             <Post
               user={props.user.displayName}
+              userObj={props.user}
               text={post.text}
               createdAt={post.createdAt}
               postId={post.id}
               key={post.id}
               likes={post.likes}
               dislikes={post.dislikes}
-              browser={props.user.displayName}
+              browser={props.user}
               userRef={userRef}
               commentRef={postsRef.doc(post.id).collection('comments')}
             />
