@@ -9,11 +9,11 @@ import { Link } from "react-router-dom";
 const UserProfile = (props) => {
   const [userData, setUserData] = useState({});
   const [edit, setEdit] = useState({
-    bio: "false",
+    bio: "",
     edit: "",
   });
   const [count, setCount] = useState(0);
-
+  const [openEditor, setOpenEditor] = useState(false);
   const [friends, setFriends] = useState([]);
   const [openFriends, setOpenFriends] = useState(false);
   //const postsRef = props.firestore
@@ -148,6 +148,21 @@ const UserProfile = (props) => {
       </p>
       {userData ? (
         <>
+          {!openEditor ? (
+            <button
+              className="profile-editor-switch"
+              onClick={() => setOpenEditor(true)}
+            >
+              Open Editor
+            </button>
+          ) : (
+            <button
+              className="profile-editor-switch"
+              onClick={() => setOpenEditor(false)}
+            >
+              Close Editor
+            </button>
+          )}
           <p id="user-profile-biography" className="user-profile-details">
             Biography: {userData.bio}
           </p>
@@ -171,53 +186,59 @@ const UserProfile = (props) => {
           </p>
         </>
       ) : null}
-      <section id="profile-editor">
-        <button
-          id="user-profile-edit-profile"
-          className="user-profile-details"
-          onClick={() => editUserData()}
-        >
-          Edit Profile
-        </button>
-        <select
-          id="user-profile-bio-edit-select"
-          value={edit.bio}
-          onChange={(e) =>
-            setEdit({
-              ...edit,
-              bio: e.target.value,
-            })
-          }
-        >
-          <option value="true">Bio</option>
-          <option value="false">Profile Picture</option>
-        </select>
-        {edit.bio === "true" ? (
-          <textarea
-            value={edit.edit}
-            id="user-profile-bio-editor"
+      {openEditor ? (
+        <section id="profile-editor">
+          <button
+            id="user-profile-edit-profile"
+            className="user-profile-details"
+            onClick={() => editUserData()}
+          >
+            Edit Profile
+          </button>
+          <select
+            id="user-profile-bio-edit-select"
+            value={edit.bio}
             onChange={(e) =>
               setEdit({
                 ...edit,
-                edit: e.target.value,
+                bio: e.target.value,
               })
             }
-          />
-        ) : edit.bio === "false" ? (
-          <input
-            type="url"
-            placeholder="enter an image link"
-            value={edit.edit}
-            id="user-profile-photo-editor"
-            onChange={(e) =>
-              setEdit({
-                ...edit,
-                edit: e.target.value,
-              })
-            }
-          />
-        ) : null}
-      </section>
+          >
+            <option value="" disabled selected>
+              Choose Detail
+            </option>
+            <option value="true">Bio</option>
+            <option value="false">Profile Picture</option>
+          </select>
+          {edit.bio === "true" ? (
+            <textarea
+              value={edit.edit}
+              id="user-profile-bio-editor"
+              maxLength="100"
+              onChange={(e) =>
+                setEdit({
+                  ...edit,
+                  edit: e.target.value,
+                })
+              }
+            />
+          ) : edit.bio === "false" ? (
+            <input
+              type="url"
+              placeholder="enter an image link"
+              value={edit.edit}
+              id="user-profile-photo-editor"
+              onChange={(e) =>
+                setEdit({
+                  ...edit,
+                  edit: e.target.value,
+                })
+              }
+            />
+          ) : null}
+        </section>
+      ) : null}
       {!openFriends ? (
         <section id="user-profile-user-posts">
           {posts &&

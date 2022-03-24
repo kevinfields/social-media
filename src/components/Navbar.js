@@ -54,7 +54,13 @@ const Navbar = (props) => {
           <Route path="/sign-out" element={<SignOut auth={props.auth} />} />
           <Route
             path="/my-feed"
-            element={<MyFeed user={props.user} firestore={props.firestore} />}
+            element={
+              <MyFeed
+                user={props.user}
+                firestore={props.firestore}
+                changeOtherUser={(u) => changeOtherUser(u)}
+              />
+            }
           />
           <Route
             path="/user-profile"

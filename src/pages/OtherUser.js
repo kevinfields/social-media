@@ -8,8 +8,7 @@ const OtherUser = (props) => {
     .collection("users")
     .doc(props.user.id)
     .collection("posts");
-  const userRef = props.firestore
-    .collection('users').doc(props.browser.uid);
+  const userRef = props.firestore.collection("users").doc(props.browser.uid);
   const query = postsRef.orderBy("createdAt", "desc");
   const [posts] = useCollectionData(query, { idField: "id" });
 
@@ -57,7 +56,7 @@ const OtherUser = (props) => {
       <p id="user-profile-biography" className="user-profile-details">
         Biography: {props.user.bio}
       </p>
-      <p id='user-profile-friend-list' className='user-profile-details'>
+      <p id="user-profile-friend-list" className="user-profile-details">
         Friends: {props.user.friends.length}
       </p>
       <section id="user-profile-user-posts">
@@ -75,7 +74,7 @@ const OtherUser = (props) => {
               likeStatus={post.likes.includes(props.browser.uid)}
               onLike={() => likePost(props.browser, post.id)}
               userRef={userRef}
-              commentRef={postsRef.doc(post.id).collection('comments')}
+              commentRef={postsRef.doc(post.id).collection("comments")}
             />
           ))}
       </section>

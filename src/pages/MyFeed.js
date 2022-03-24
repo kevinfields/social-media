@@ -20,10 +20,17 @@ const MyFeed = (props) => {
   const getPosts = async () => {
     let data = [];
     for (const f of friends) {
+      let user;
+      await props.firestore
+        .collection("users")
+        .doc(f)
+        .get()
+        .then((doc) => (user = doc.data()));
       await props.firestore
         .collection("users")
         .doc(f)
         .collection("posts")
+        .orderBy("createdAt", "desc")
         .get()
         .then((snap) => {
           snap.forEach((doc) => {
@@ -31,6 +38,7 @@ const MyFeed = (props) => {
               data: doc.data(),
               id: doc.id,
               author: f,
+              user: user,
             });
           });
         });
@@ -75,6 +83,7 @@ const MyFeed = (props) => {
         <section className="feed-post" key={post.id}>
           <Post
             user={post.data.author ? post.data.author : post.data.uid}
+            userData={post.user}
             text={post.data.text}
             createdAt={post.data.createdAt}
             postId={post.id}
@@ -100,6 +109,7 @@ const MyFeed = (props) => {
               .collection("posts")
               .doc(post.id)
               .collection("comments")}
+            changeOtherUser={(u) => props.changeOtherUser(u)}
           />
         </section>
       ))}

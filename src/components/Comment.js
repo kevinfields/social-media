@@ -8,7 +8,13 @@ const Comment = (props) => {
     setRemoved(true);
   }
   const onDelete = async (comment) => {
-    console.log("comment: " + JSON.stringify(comment));
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this comment? This cannot be undone."
+      )
+    ) {
+      return;
+    }
     let data;
     await props.cRef
       .doc(comment)
@@ -32,11 +38,11 @@ const Comment = (props) => {
         {!removed ? props.comment.data.text : "comment removed"}
       </p>
       <p className="comment-poster"> - {props.comment.data.author}</p>
-      { !removed ?
+      {!removed ? (
         <p className="comment-time">
-        {formatTime(props.comment.data.createdAt.seconds + "000")}
-      </p>
-      : null}
+          {formatTime(props.comment.data.createdAt.seconds + "000")}
+        </p>
+      ) : null}
       {props.comment.data.uid === props.browser.uid && !removed ? (
         <button
           className="comment-delete-button"

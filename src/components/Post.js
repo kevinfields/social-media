@@ -1,9 +1,10 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import formatTime from "../functions/formatTime";
 import Comment from "./Comment";
 
 const Post = (props) => {
-  const [current, setCurrent] = useState('');
+  const [current, setCurrent] = useState("");
   const [open, setOpen] = useState(false);
 
   const [coms, setComs] = useState([]);
@@ -11,19 +12,21 @@ const Post = (props) => {
 
   const getComments = async () => {
     if (props.commentRef) {
-    await props.commentRef.get().then((snap) => {
-      snap.forEach((doc) => {
-        comments.push({
-          data: doc.data(),
-          id: doc.id,
+      await props.commentRef
+        .orderBy("createdAt", "asc")
+        .get()
+        .then((snap) => {
+          snap.forEach((doc) => {
+            comments.push({
+              data: doc.data(),
+              id: doc.id,
+            });
+          });
         });
-      });
-    });
     }
   };
 
   const addComment = async (text) => {
-
     await props.commentRef
       .add({
         author: props.browser.displayName,
@@ -38,15 +41,15 @@ const Post = (props) => {
         getComments().then(() => {
           setComs(comments);
         });
-        setCurrent('');
+        setCurrent("");
         setOpen(false);
       });
   };
 
   const cancelComment = () => {
-    setCurrent('');
+    setCurrent("");
     setOpen(false);
-  }
+  };
 
   useEffect(() => {
     getComments().then(() => {
@@ -56,10 +59,18 @@ const Post = (props) => {
 
   return (
     <div className="post">
-      <p>{props.text}</p>
+      <h3>{props.text}</h3>
       <p>
         - {props.user} - {formatTime(props.createdAt.seconds + "000")}
       </p>
+      {props.userData ? (
+        <Link
+          to={`/all-users/${props.user}`}
+          onClick={() => props.changeOtherUser(props.userData)}
+        >
+          Profile
+        </Link>
+      ) : null}
       {props.onLike && props.likeStatus ? (
         <button onClick={() => props.onLike()}>Unlike</button>
       ) : props.onLike ? (
@@ -77,19 +88,31 @@ const Post = (props) => {
             />
           ))
         : null}
-      { !open ? <button onClick={() => setOpen(true)}>Add Comment</button> : null}
-      { open ?
-      <section className='add-comment-screen'>
-        <textarea className='add-comment-text' placeholder='write a comment' rows={3} value={current} onChange={(e) => setCurrent(e.target.value)} />
-        <button className="add-comment-button" onClick={() => addComment(current)}>
-          Post
-        </button>
-        <button className='stop-add-comment' onClick={() => cancelComment()}>Cancel</button>
-      </section>
-      : null}
+      {!open ? (
+        <button onClick={() => setOpen(true)}>Add Comment</button>
+      ) : null}
+      {open ? (
+        <section className="add-comment-screen">
+          <textarea
+            className="add-comment-text"
+            placeholder="write a comment"
+            rows={3}
+            value={current}
+            onChange={(e) => setCurrent(e.target.value)}
+          />
+          <button
+            className="add-comment-button"
+            onClick={() => addComment(current)}
+          >
+            Post
+          </button>
+          <button className="stop-add-comment" onClick={() => cancelComment()}>
+            Cancel
+          </button>
+        </section>
+      ) : null}
     </div>
   );
 };
 
 export default Post;
-
