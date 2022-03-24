@@ -5,7 +5,7 @@ import UserTab from "../components/UserTab";
 
 const AllUsers = (props) => {
   const usersRef = props.firestore.collection("users");
-  const query = usersRef.orderBy("bio", "desc");
+  const query = usersRef.orderBy("accountBirthday", "desc");
   const [users] = useCollectionData(query, { idField: "id" });
   const [friends, setFriends] = useState([]);
 

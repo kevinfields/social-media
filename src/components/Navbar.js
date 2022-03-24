@@ -12,6 +12,7 @@ const Navbar = (props) => {
   const [user, setUser] = useState("");
 
   const changeOtherUser = (u) => {
+    console.log("user: " + JSON.stringify(u));
     setUser(u);
   };
 

@@ -121,7 +121,7 @@ button {
 }
 
 #user-profile-biography {
-  top: 40vh;
+  top: 41vh;
   width: 20vw;
   overflow-wrap: break-word;
 }
@@ -157,6 +157,7 @@ button {
   width: 20vw;
   top: 56vh;
   border: 1px solid black;
+  background-color: white;
 }
 
 .profile-editor-switch {
@@ -200,6 +201,13 @@ button {
   margin-bottom: 1vh;
 }
 
+.post-profile-picture {
+  width: 5vw;
+  height: 5vw;
+  border: 1px solid black;
+  position: absolute;
+  left: 22 vw;
+}
 #user-profile-user-posts {
   position: relative;
   left: 30vw;
@@ -395,10 +403,10 @@ button {
 
 #main-feed {
   position: fixed;
-  left: 15vw;
+  left: 20vw;
   top: 23vh;
   border: 1px solid black;
-  width: 70vw;
+  width: 60vw;
   height: 62vh;
   display: flex;
   flex-direction: column;

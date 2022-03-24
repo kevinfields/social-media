@@ -66,12 +66,9 @@ const Post = (props) => {
       return <p>{props.user}</p>;
     } else {
       return (
-        <Link
-          to={`/all-users/${props.uid}`}
-          onClick={() => props.changeOtherUser(props.userData)}
-        >
-          {props.user}
-        </Link>
+        <p onClick={() => props.changeOtherUser(props.userData)}>
+          <Link to={`/all-users/${props.uid}`}>{props.user}</Link>
+        </p>
       );
     }
   };
@@ -79,9 +76,14 @@ const Post = (props) => {
   return (
     <div className="post">
       <h3>{props.text}</h3>
-      <p>
-        - <ProfileLink /> - {formatTime(props.createdAt.seconds + "000")}
-      </p>
+      <h5>
+        <ProfileLink /> - {formatTime(props.createdAt.seconds + "000")}
+      </h5>
+      {/*<img
+        className="post-profile-picture"
+        src={props.userData ? props.userData.photoURL : null}
+        alt="none"
+      />*/}
       {props.onLike && props.likeStatus ? (
         <button onClick={() => props.onLike()}>Unlike</button>
       ) : props.onLike ? (

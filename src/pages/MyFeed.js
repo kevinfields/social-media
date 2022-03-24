@@ -44,7 +44,6 @@ const MyFeed = (props) => {
           });
         });
     }
-    console.log(JSON.stringify(data));
     setPosts(data.sort((a, b) => b.time - a.time));
   };
 

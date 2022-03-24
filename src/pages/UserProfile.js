@@ -76,6 +76,7 @@ const UserProfile = (props) => {
   };
 
   const editUserData = async () => {
+    setOpenEditor(false);
     let data;
     if (edit.edit === "" || edit.edit === null || edit.edit === undefined) {
       return;
@@ -109,6 +110,7 @@ const UserProfile = (props) => {
     getProfileData();
     // eslint-disable-next-line
   }, []);
+
   //  useEffect(() => {
   //    getPosts();
   //  }, []);
@@ -193,7 +195,7 @@ const UserProfile = (props) => {
             className="user-profile-details"
             onClick={() => editUserData()}
           >
-            Edit Profile
+            Make Change
           </button>
           <select
             id="user-profile-bio-edit-select"
@@ -215,7 +217,7 @@ const UserProfile = (props) => {
             <textarea
               value={edit.edit}
               id="user-profile-bio-editor"
-              maxLength="100"
+              maxLength="400"
               onChange={(e) =>
                 setEdit({
                   ...edit,
