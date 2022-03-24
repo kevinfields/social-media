@@ -27,6 +27,10 @@ const Post = (props) => {
   };
 
   const addComment = async (text) => {
+    if (text === "" || text === undefined || text === null) {
+      alert("Comments cannot be blank");
+      return;
+    }
     await props.commentRef
       .add({
         author: props.browser.displayName,
@@ -57,20 +61,27 @@ const Post = (props) => {
     });
   }, []);
 
+  const ProfileLink = () => {
+    if (!props.userData) {
+      return <p>{props.user}</p>;
+    } else {
+      return (
+        <Link
+          to={`/all-users/${props.uid}`}
+          onClick={() => props.changeOtherUser(props.userData)}
+        >
+          {props.user}
+        </Link>
+      );
+    }
+  };
+
   return (
     <div className="post">
       <h3>{props.text}</h3>
       <p>
-        - {props.user} - {formatTime(props.createdAt.seconds + "000")}
+        - <ProfileLink /> - {formatTime(props.createdAt.seconds + "000")}
       </p>
-      {props.userData ? (
-        <Link
-          to={`/all-users/${props.user}`}
-          onClick={() => props.changeOtherUser(props.userData)}
-        >
-          Profile
-        </Link>
-      ) : null}
       {props.onLike && props.likeStatus ? (
         <button onClick={() => props.onLike()}>Unlike</button>
       ) : props.onLike ? (

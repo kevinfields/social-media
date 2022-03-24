@@ -39,12 +39,13 @@ const MyFeed = (props) => {
               id: doc.id,
               author: f,
               user: user,
+              time: doc.data().createdAt,
             });
           });
         });
     }
     console.log(JSON.stringify(data));
-    setPosts(data);
+    setPosts(data.sort((a, b) => b.time - a.time));
   };
 
   const likePost = async (user, id, postsRef) => {
@@ -83,6 +84,7 @@ const MyFeed = (props) => {
         <section className="feed-post" key={post.id}>
           <Post
             user={post.data.author ? post.data.author : post.data.uid}
+            uid={post.data.uid}
             userData={post.user}
             text={post.data.text}
             createdAt={post.data.createdAt}
