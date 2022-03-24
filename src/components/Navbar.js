@@ -24,7 +24,7 @@ const Navbar = (props) => {
           </Link>
         </p>
         <p>
-          <Link className='nav-link' to='/my-feed'>
+          <Link className="nav-link" to="/my-feed">
             My Feed
           </Link>
         </p>
@@ -52,11 +52,18 @@ const Navbar = (props) => {
       <section>
         <Routes>
           <Route path="/sign-out" element={<SignOut auth={props.auth} />} />
-          <Route path='/my-feed' element={<MyFeed user={props.user} firestore={props.firestore} />} />
+          <Route
+            path="/my-feed"
+            element={<MyFeed user={props.user} firestore={props.firestore} />}
+          />
           <Route
             path="/user-profile"
             element={
-              <UserProfile user={props.user} firestore={props.firestore} />
+              <UserProfile
+                user={props.user}
+                firestore={props.firestore}
+                changeOtherUser={(u) => changeOtherUser(u)}
+              />
             }
           />
           <Route

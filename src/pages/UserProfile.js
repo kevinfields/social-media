@@ -3,14 +3,19 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import formatTime from "../functions/formatTime";
 import goodPhotoURL from "../functions/goodPhotoURL";
 import Post from "../components/Post";
+import UserTab from "../components/UserTab";
+import { Link } from "react-router-dom";
 
 const UserProfile = (props) => {
   const [userData, setUserData] = useState({});
   const [edit, setEdit] = useState({
-    bio: 'false',
-    edit: ''
-  })
+    bio: "false",
+    edit: "",
+  });
   const [count, setCount] = useState(0);
+
+  const [friends, setFriends] = useState([]);
+  const [openFriends, setOpenFriends] = useState(false);
   //const postsRef = props.firestore
   //  .collection("users")
   //  .doc(props.user.uid)
@@ -21,7 +26,6 @@ const UserProfile = (props) => {
   const [posts] = useCollectionData(query, { idField: "id" });
 
   const getProfileData = async () => {
-    
     let data;
     await userRef.get().then((doc) => {
       data = doc.data();
@@ -47,36 +51,59 @@ const UserProfile = (props) => {
     }
   };
 
-  const editUserData = async () => {
-
+  const openFriendsList = async (bool) => {
+    if (!bool) {
+      setOpenFriends(false);
+      return;
+    }
     let data;
-    if (edit.edit === '' || edit.edit === null || edit.edit === undefined){
+    let list = [];
+    await userRef.get().then((doc) => (data = doc.data()));
+    for (const f of data.friends) {
+      await props.firestore
+        .collection("users")
+        .doc(f)
+        .get()
+        .then((doc) => {
+          list.push({
+            id: f,
+            data: doc.data(),
+          });
+        });
+    }
+    setFriends(list);
+    setOpenFriends(true);
+  };
+
+  const editUserData = async () => {
+    let data;
+    if (edit.edit === "" || edit.edit === null || edit.edit === undefined) {
       return;
     }
 
-    await userRef.get().then(doc => data = doc.data());
+    await userRef.get().then((doc) => (data = doc.data()));
 
-      if (edit.bio === 'false') {
-        if (goodPhotoURL(edit.edit)) {
+    if (edit.bio === "false") {
+      if (goodPhotoURL(edit.edit)) {
         await userRef.set({
           ...data,
-          photoURL: edit.edit
-        })
-        } else {
-          alert('Please enter a URL ending with a .jpg, .png, or .jpeg')
-        }
+          photoURL: edit.edit,
+        });
       } else {
-        await userRef.set({
-          ...data,
-          bio: edit.edit
-        })
+        alert("Please enter a URL ending with a .jpg, .png, or .jpeg");
       }
-      setEdit({
-        ...edit,
-        edit: '',
-      })
+    } else {
+      await userRef.set({
+        ...data,
+        bio: edit.edit,
+      });
+    }
+    setEdit({
+      ...edit,
+      edit: "",
+    });
     getProfileData();
-  }
+  };
 
   useEffect(() => {
     getProfileData();
@@ -99,7 +126,9 @@ const UserProfile = (props) => {
 
   return (
     <div className="user-profile">
-      <p id="user-profile-name-header">{userData ? userData.name : props.user.displayName}</p>
+      <p id="user-profile-name-header">
+        {userData ? userData.name : props.user.displayName}
+      </p>
       <img
         id="user-profile-image"
         src={userData ? userData.photoURL : props.user.photoURL}
@@ -119,53 +148,116 @@ const UserProfile = (props) => {
       </p>
       {userData ? (
         <>
-        <p id="user-profile-biography" className="user-profile-details">
-          Biography: {userData.bio}
-        </p>
-        <p id='user-profile-friend-list' className='user-profile-details'>
-          Friends: {count}
-        </p>
-        </> 
+          <p id="user-profile-biography" className="user-profile-details">
+            Biography: {userData.bio}
+          </p>
+          <p id="user-profile-friend-list" className="user-profile-details">
+            Friends: {count}
+            {!openFriends ? (
+              <button
+                onClick={() => openFriendsList(true)}
+                id="user-profile-friend-list-button"
+              >
+                View List
+              </button>
+            ) : (
+              <button
+                onClick={() => openFriendsList(false)}
+                id="user-profile-post-list-button"
+              >
+                View Posts
+              </button>
+            )}
+          </p>
+        </>
       ) : null}
-      <section id='profile-editor'>
-        <button id='user-profile-edit-profile' className='user-profile-details' onClick={() => editUserData()}>Edit Profile</button>
-        <select id='user-profile-bio-edit-select' value={edit.bio} onChange={(e) => setEdit({
-          ...edit,
-          bio: e.target.value,
-        })}>
-          <option value='true'>Bio</option>
-          <option value='false'>Profile Picture</option>
+      <section id="profile-editor">
+        <button
+          id="user-profile-edit-profile"
+          className="user-profile-details"
+          onClick={() => editUserData()}
+        >
+          Edit Profile
+        </button>
+        <select
+          id="user-profile-bio-edit-select"
+          value={edit.bio}
+          onChange={(e) =>
+            setEdit({
+              ...edit,
+              bio: e.target.value,
+            })
+          }
+        >
+          <option value="true">Bio</option>
+          <option value="false">Profile Picture</option>
         </select>
-        {
-          edit.bio === 'true' ? 
-          <textarea value={edit.edit} id='user-profile-bio-editor' onChange={(e) => setEdit({
-            ...edit,
-            edit: e.target.value
-          })} />
-          : edit.bio === 'false' ? <input type='url' placeholder='enter an image link' value={edit.edit} id='user-profile-photo-editor' onChange={(e) => setEdit({
-            ...edit,
-            edit: e.target.value
-          })} />
-          : null}
+        {edit.bio === "true" ? (
+          <textarea
+            value={edit.edit}
+            id="user-profile-bio-editor"
+            onChange={(e) =>
+              setEdit({
+                ...edit,
+                edit: e.target.value,
+              })
+            }
+          />
+        ) : edit.bio === "false" ? (
+          <input
+            type="url"
+            placeholder="enter an image link"
+            value={edit.edit}
+            id="user-profile-photo-editor"
+            onChange={(e) =>
+              setEdit({
+                ...edit,
+                edit: e.target.value,
+              })
+            }
+          />
+        ) : null}
       </section>
-      <section id="user-profile-user-posts">
-        {posts &&
-          posts.map((post) => (
-            <Post
-              user={props.user.displayName}
-              userObj={props.user}
-              text={post.text}
-              createdAt={post.createdAt}
-              postId={post.id}
-              key={post.id}
-              likes={post.likes}
-              dislikes={post.dislikes}
-              browser={props.user}
-              userRef={userRef}
-              commentRef={postsRef.doc(post.id).collection('comments')}
-            />
-          ))}
-      </section>
+      {!openFriends ? (
+        <section id="user-profile-user-posts">
+          {posts &&
+            posts.map((post) => (
+              <Post
+                user={props.user.displayName}
+                userObj={props.user}
+                text={post.text}
+                createdAt={post.createdAt}
+                postId={post.id}
+                key={post.id}
+                likes={post.likes}
+                dislikes={post.dislikes}
+                browser={props.user}
+                userRef={userRef}
+                commentRef={postsRef.doc(post.id).collection("comments")}
+              />
+            ))}
+        </section>
+      ) : (
+        <section id="friend-list">
+          {friends &&
+            friends.map((friend) => (
+              <div key={friend.id}>
+                <UserTab
+                  user={friend.data}
+                  viewer={props.user.uid}
+                  friends={true}
+                />
+                <Link
+                  className="friend-profile-link"
+                  to={`/all-users/${friend.id}`}
+                  onClick={() => props.changeOtherUser(friend.data)}
+                >
+                  Profile
+                </Link>
+              </div>
+            ))}
+        </section>
+      )}
     </div>
   );
 };

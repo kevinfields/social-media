@@ -125,6 +125,24 @@ button {
 #user-profile-friend-list {
   top: 40vh;
 }
+
+#user-profile-friend-list-button {
+  top: 42vh;
+  right: 10vw;
+  width: 5vw;
+  font-size: 8pt;
+  left: 20.5vw;
+  position: fixed;
+}
+
+#user-profile-post-list-button {
+  top: 42vh;
+  right: 10vw;
+  width: 6vw;
+  font-size: 8pt;
+  left: 20.5vw;
+  position: fixed;
+}
 #user-profile-edit-profile {
   top: 70vh;
 }
@@ -153,7 +171,6 @@ button {
   left: 16vw;
   top: 50vh;
   width: 15vw;
-
 }
 
 #user-profile-bio-edit-select {
@@ -182,6 +199,23 @@ button {
   overflow: scroll;
   width: 35vw;
   height: 60vh;
+}
+
+#friend-list {
+  position: relative;
+  left: 30vw;
+  top: 10vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+  overflow: scroll;
+  width: 35vw;
+  height: 60vh;
+}
+
+.friend-profile-link {
+  position: relative;
+  top: 1vh;
 }
 
 .create-post-page {
@@ -326,7 +360,7 @@ button {
   width: 5vw;
 }
 
-.add-comment-screen{
+.add-comment-screen {
   border: 1px solid black;
   padding: 1vh;
 }
@@ -346,7 +380,6 @@ button {
 .stop-add-comment {
   position: relative;
   left: 5vw;
-
 }
 
 #main-feed {

@@ -9,12 +9,12 @@ const UserTab = (props) => {
         <img
           className="user-tab-image"
           src={props.user.photoURL}
-          alt={props.user.name.substring(0, 6)}
+          alt={props.user.name}
         />
       </div>
       {props.viewer !== props.user.id ? (
         <>
-          {!props.friends ? (
+          {!props.friends && props.addUser ? (
             <button
               className="user-tab-add-friend-button"
               onClick={() => props.addUser(props.user.id, true)}
