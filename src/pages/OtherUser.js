@@ -59,6 +59,9 @@ const OtherUser = (props) => {
       <p id="user-profile-friend-list" className="user-profile-details">
         Friends: {props.user.friends.length}
       </p>
+      <p id='user-profile-followers-list' className='user-profile-details'>
+        Followers: {props.user.followers.length}
+      </p>
       <section id="user-profile-user-posts">
         {posts &&
           posts.map((post) => (

@@ -75,10 +75,10 @@ const Post = (props) => {
 
   return (
     <div className="post">
-      <h3>{props.text}</h3>
-      <h5>
+      <h4>{props.text}</h4>
+      <h3>
         <ProfileLink /> - {formatTime(props.createdAt.seconds + "000")}
-      </h5>
+      </h3>
       {/*<img
         className="post-profile-picture"
         src={props.userData ? props.userData.photoURL : null}

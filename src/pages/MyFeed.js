@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Post from "../components/Post";
+import Loading from "../components/Loading";
+import AddFriendsMessage from "../components/AddFriendsMessage";
 
 const MyFeed = (props) => {
   const userRef = props.firestore.collection("users").doc(props.user.uid);
   const [friends, setFriends] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [addFriends, setAddFriends] = useState(false);
   let data;
   const getFriends = async () => {
     await userRef
@@ -15,6 +18,9 @@ const MyFeed = (props) => {
       .then(() => {
         setFriends(data.friends);
       });
+      if (data.friends.length === 0) {
+        setAddFriends(true);
+      }
   };
 
   const getPosts = async () => {
@@ -79,7 +85,7 @@ const MyFeed = (props) => {
 
   return (
     <div id="main-feed">
-      {posts.map((post) => (
+      {posts && posts.map((post) => (
         <section className="feed-post" key={post.id}>
           <Post
             user={post.data.author ? post.data.author : post.data.uid}
@@ -114,6 +120,11 @@ const MyFeed = (props) => {
           />
         </section>
       ))}
+      { posts.length === 0 && !addFriends ?
+        <Loading />
+        : addFriends ?
+        <AddFriendsMessage />
+        : null }
     </div>
   );
 };

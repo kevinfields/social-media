@@ -4,7 +4,6 @@ import UserProfile from "../pages/UserProfile";
 import SignOut from "../pages/SignOut";
 import CreatePost from "../pages/CreatePost";
 import AllUsers from "../pages/AllUsers";
-import FriendRequests from "../pages/FriendRequests";
 import MyFeed from "../pages/MyFeed";
 import OtherUser from "../pages/OtherUser";
 
@@ -42,11 +41,6 @@ const Navbar = (props) => {
         <p>
           <Link className="nav-link" to="/all-users">
             All Users
-          </Link>
-        </p>
-        <p>
-          <Link className="nav-link" to="/friend-requests">
-            Friend Requests
           </Link>
         </p>
       </section>
@@ -88,12 +82,6 @@ const Navbar = (props) => {
                 firestore={props.firestore}
                 onSelect={(u) => changeOtherUser(u)}
               />
-            }
-          />
-          <Route
-            path="/friend-requests"
-            element={
-              <FriendRequests user={props.user} firestore={props.firestore} />
             }
           />
           <Route

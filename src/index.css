@@ -10,13 +10,18 @@ code {
 
 button {
   border-radius: 3px;
-  background: transparent;
+  background: rgb(220, 242, 241);
+}
+
+button:hover {
+  background-color: lightseagreen;
+  cursor: pointer;
 }
 
 .App {
-  border: 2px solid rgb(85, 85, 85);
+  border: 2px solid rgb(0, 255, 217);
   border-radius: 5px;
-  box-shadow: 2px 2px 2px 2px black;
+  box-shadow: 2px 2px 2px 2px rgb(0, 128, 98);
   border-bottom-style: none;
   width: 72vw;
   height: 72vh;
@@ -29,9 +34,9 @@ button {
   text-align: center;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
-  color: rgb(33, 21, 199);
-  text-shadow: -1px -1px 0 rgb(0, 217, 255), 1px -1px 0 rgb(0, 217, 255),
-    -1px 1px 0 rgb(0, 217, 255), 1px 1px 0 rgb(0, 217, 255);
+  color: rgb(21, 199, 172);
+  text-shadow: -1px -1px 0 rgb(0, 0, 255), 1px -1px 0 rgb(0, 0, 255),
+    -1px 1px 0 rgb(0, 0, 255), 1px 1px 0 rgb(0, 0, 255);
   font-size: 20pt;
   position: relative;
   bottom: 2vh;
@@ -116,12 +121,12 @@ button {
   top: 34vh;
 }
 
-#user-profile-total-posts {
-  top: 43vh;
+#user-profile-followers-list {
+  top: 40vh;
 }
 
 #user-profile-biography {
-  top: 41vh;
+  top: 43vh;
   width: 20vw;
   overflow-wrap: break-word;
 }
@@ -139,6 +144,14 @@ button {
   position: fixed;
 }
 
+#user-profile-follower-list-button {
+  top: 42vh;
+  width: 5vw;
+  font-size: 8pt;
+  left: 21.5vw;
+  position: fixed;
+}
+
 #user-profile-post-list-button {
   top: 39vh;
   right: 10vw;
@@ -147,6 +160,14 @@ button {
   left: 20.5vw;
   position: fixed;
 }
+
+/* #user-profile-post-list2-button {
+  top: 42vh;
+  width: 6vw;
+  font-size: 8pt;
+  left: 21.5vw;
+  position: fixed;
+} */
 #user-profile-edit-profile {
   top: 80vh;
 }
@@ -406,6 +427,8 @@ button {
   left: 20vw;
   top: 23vh;
   border: 1px solid black;
+  border-radius: 3px;
+  box-shadow: 1px 1px 1px 1px black;
   width: 60vw;
   height: 62vh;
   display: flex;
@@ -413,4 +436,14 @@ button {
   overflow: scroll;
   gap: 1vh;
   padding-left: 1vw;
+}
+
+.loading-screen {
+  font-family:'Times New Roman', Times, serif;
+  font-weight: bold;
+  font-size: 20pt;
+  width: 12vw;
+  position: fixed;
+  left: 44vw;
+  text-align: left;
 }

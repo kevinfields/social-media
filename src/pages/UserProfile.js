@@ -12,15 +12,20 @@ const UserProfile = (props) => {
     bio: "",
     edit: "",
   });
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState({
+    friends: 0,
+    followers: 0
+  });
   const [openEditor, setOpenEditor] = useState(false);
   const [friends, setFriends] = useState([]);
   const [openFriends, setOpenFriends] = useState(false);
+  const [openFollowers, setOpenFollowers] = useState(false);
   //const postsRef = props.firestore
   //  .collection("users")
   //  .doc(props.user.uid)
   //  .collection("posts");
   const userRef = props.firestore.collection("users").doc(props.user.uid);
+  const usersRef = props.firestore.collection('users');
   const postsRef = userRef.collection("posts");
   const query = postsRef.orderBy("createdAt", "desc");
   const [posts] = useCollectionData(query, { idField: "id" });
@@ -31,8 +36,8 @@ const UserProfile = (props) => {
       data = doc.data();
     });
     setUserData(data);
-    setCount(data.friends.length);
     if (data === undefined || data === null) {
+      if (window.confirm('Would you like to create an account')) {
       await userRef.set({
         id: props.user.uid,
         accountBirthday: new Date(),
@@ -42,16 +47,28 @@ const UserProfile = (props) => {
         commentCount: 0,
         bio: "",
         friends: [],
+        followers: [],
         likedPosts: [],
         dislikedPosts: [],
         likedComments: [],
         dislikedComments: [],
         requests: [],
+      }).then(() => {
+          userRef.get().then((doc) => {
+          data = doc.data();
+        });
       });
+      } else {
+        return
+      }
     }
+    setCount({
+      friends: data.friends.length,
+      followers: data.followers.length,
+    })
   };
 
-  const openFriendsList = async (bool) => {
+  const openFriendsList = async (bool, type) => {
     if (!bool) {
       setOpenFriends(false);
       return;
@@ -59,6 +76,7 @@ const UserProfile = (props) => {
     let data;
     let list = [];
     await userRef.get().then((doc) => (data = doc.data()));
+    if (type === 'friends') {
     for (const f of data.friends) {
       await props.firestore
         .collection("users")
@@ -70,6 +88,20 @@ const UserProfile = (props) => {
             data: doc.data(),
           });
         });
+    }
+    } else {
+      for (const f of data.followers) {
+        await props.firestore
+        .collection("users")
+        .doc(f)
+        .get()
+        .then((doc) => {
+          list.push({
+            id: f,
+            data: doc.data(),
+          });
+        });
+    }
     }
     setFriends(list);
     setOpenFriends(true);
@@ -105,6 +137,46 @@ const UserProfile = (props) => {
     });
     getProfileData();
   };
+
+  const addUser = async (id, actually) => {
+    let data;
+    let friendData;
+
+    await usersRef
+    .doc(props.user.uid)
+    .get()
+    .then((doc) => {
+      data = doc.data();
+    });
+
+  await usersRef
+    .doc(id)
+    .get()
+    .then((doc) => {
+      friendData = doc.data();
+    });
+
+    let friendsList = [...data.friends];
+    let followersList = [...friendData.followers];
+
+    if (actually) {
+      friendsList.push(id);
+      followersList.push(props.user.uid);
+    } else {
+      friendsList = friendsList.filter((friend) => friend !== id);
+      followersList = followersList.filter((follow) => follow !== props.user.uid);
+    }
+
+    await usersRef.doc(props.user.uid).set({
+      ...data,
+      friends: friendsList,
+    });
+    await usersRef.doc(id).set({
+      ...friendData,
+      followers: followersList,
+    });
+    getProfileData();
+  }
 
   useEffect(() => {
     getProfileData();
@@ -165,14 +237,11 @@ const UserProfile = (props) => {
               Close Editor
             </button>
           )}
-          <p id="user-profile-biography" className="user-profile-details">
-            Biography: {userData.bio}
-          </p>
           <p id="user-profile-friend-list" className="user-profile-details">
-            Friends: {count}
+            Friends: {count.friends}
             {!openFriends ? (
               <button
-                onClick={() => openFriendsList(true)}
+                onClick={() => openFriendsList(true, 'friends')}
                 id="user-profile-friend-list-button"
               >
                 View List
@@ -185,6 +254,27 @@ const UserProfile = (props) => {
                 View Posts
               </button>
             )}
+          </p>
+          <p id='user-profile-followers-list' className='user-profile-details'>
+            Followers: {count.followers}
+            {!openFriends ? (
+            <button
+              onClick={() => openFriendsList(true, 'followers')}
+              id="user-profile-follower-list-button"
+            >
+              View List
+            </button>
+          ) : null
+            // <button
+            //   onClick={() => openFriendsList(false)}
+            //   id="user-profile-post2-list-button"
+            // >
+            //   View Posts
+            // </button>
+          }
+          </p>
+          <p id="user-profile-biography" className="user-profile-details">
+            Biography: {userData.bio}
           </p>
         </>
       ) : null}
@@ -268,7 +358,8 @@ const UserProfile = (props) => {
                 <UserTab
                   user={friend.data}
                   viewer={props.user.uid}
-                  friends={true}
+                  friends={userData.friends.includes(friend.id)}
+                  addUser={(id, actually) => addUser(id, actually)}
                 />
                 <Link
                   className="friend-profile-link"

@@ -44,14 +44,14 @@ const AllUsers = (props) => {
       });
 
     let friendsList = [...data.friends];
-    let requestList = [...friendData.requests];
+    let followersList = [...friendData.followers];
 
     if (actually) {
       friendsList.push(id);
-      requestList.push(props.user.uid);
+      followersList.push(props.user.uid);
     } else {
       friendsList = friendsList.filter((friend) => friend !== id);
-      requestList = requestList.filter((request) => request !== props.user.uid);
+      followersList = followersList.filter((follow) => follow !== props.user.uid);
     }
 
     await usersRef.doc(props.user.uid).set({
@@ -60,7 +60,7 @@ const AllUsers = (props) => {
     });
     await usersRef.doc(id).set({
       ...friendData,
-      requests: requestList,
+      followers: followersList,
     });
     getFriends();
   };
