@@ -1,6 +1,11 @@
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
+  background-image: linear-gradient(#0031d3, seagreen, #c0ffff);
+  height: 100%;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 code {
@@ -10,13 +15,14 @@ code {
 
 button {
   border-radius: 3px;
-  background: rgb(220, 242, 241);
+  background: transparent;
 }
 
 button:hover {
   background-color: lightseagreen;
   cursor: pointer;
 }
+
 
 .App {
   border: 2px solid rgb(0, 255, 217);
@@ -53,9 +59,9 @@ button:hover {
 
 #sign-out-button {
   position: fixed;
-  left: 25vw;
+  left: 23vw;
   top: 45vh;
-  width: 4vw;
+  width: 8vw;
 }
 
 .user-home-nav {
@@ -63,7 +69,9 @@ button:hover {
   left: 1.5vw;
   top: 10vh;
   width: 10vw;
-  border: 1px solid black;
+  border: 2px solid darkseagreen;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px 2px darkcyan;
   display: flex;
   flex-direction: column;
   text-align: left;
@@ -73,12 +81,18 @@ button:hover {
 #main-nav-bar {
 }
 
+.nav-link {
+  color: yellow;
+}
+
 .user-profile {
   position: fixed;
   left: 15vw;
   top: 15vh;
   height: 70vh;
-  border: 1px solid black;
+  border: 2px solid rgb(0, 198, 198);
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px 2px darkcyan;
   width: 25vw;
 }
 
@@ -96,6 +110,8 @@ button:hover {
   top: 14vh;
   left: 20.5vw;
   width: 18vw;
+  color: white;
+  text-shadow: 1px 1px black;
   overflow-wrap: break-word;
 }
 
@@ -103,6 +119,11 @@ button:hover {
   font-size: 10pt;
   left: 15.5vw;
   position: fixed;
+  color: whitesmoke;
+}
+
+.user-profile-details button {
+  color: whitesmoke
 }
 
 #user-profile-email {
@@ -161,13 +182,6 @@ button:hover {
   position: fixed;
 }
 
-/* #user-profile-post-list2-button {
-  top: 42vh;
-  width: 6vw;
-  font-size: 8pt;
-  left: 21.5vw;
-  position: fixed;
-} */
 #user-profile-edit-profile {
   top: 80vh;
 }
@@ -186,6 +200,7 @@ button:hover {
   left: 18vw;
   top: 9vh;
   font-size: 8pt;
+  color: whitesmoke
 }
 #user-profile-bio-editor {
   font-family: Arial, Helvetica, sans-serif;
@@ -217,6 +232,7 @@ button:hover {
   border: 1px solid black;
   border-radius: 5px;
   box-shadow: 1px 1px 1px 1px black;
+  background-color: white;
   padding: 1vw;
   width: 30vw;
   margin-bottom: 1vh;
@@ -255,14 +271,22 @@ button:hover {
 
 .friend-profile-link {
   position: relative;
-  top: 1vh;
+  top: 4vh;
+  font-size: 10pt;
+  left: 1vw;
 }
 
+.profile-link {
+  position: relative;
+  left: 1vw;
+  font-size: 8pt;
+}
 .create-post-page {
   position: fixed;
   left: 16vw;
   top: 25vh;
   border: 1px solid black;
+
   width: 68vw;
   height: 50vh;
 }
@@ -270,8 +294,11 @@ button:hover {
 #create-post-button {
   position: fixed;
   left: 48vw;
-  width: 4vw;
+  width: 6vw;
+  height: 4vh;
   top: 70vh;
+  font-size: 12pt;
+  color: yellow;
 }
 
 #create-post-text {
@@ -286,8 +313,8 @@ button:hover {
 
 .all-users-page {
   position: fixed;
-  left: 16vw;
-  width: 68vw;
+  left: 30vw;
+  width: 38vw;
   top: 23vh;
   height: 62vh;
   border: 1px solid black;
@@ -300,6 +327,9 @@ button:hover {
 .user-tab {
   position: relative;
   border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px 1px black;
+  background-color: rgb(237, 245, 245);
   width: 34vw;
   height: 6vw;
   top: 7vh;
@@ -308,7 +338,7 @@ button:hover {
 
 .user-tab-id {
   position: relative;
-  bottom: 2vh;
+  bottom: 1vh;
   font-size: 6pt;
 }
 
@@ -323,7 +353,7 @@ button:hover {
   height: 6vw;
   position: relative;
   left: 28vw;
-  bottom: 12vh;
+  bottom: 11.7vh;
   border: 1px solid black;
 }
 
@@ -334,15 +364,15 @@ button:hover {
 
 .user-tab-add-friend-button {
   position: relative;
-  left: 15vw;
-  bottom: 20vh;
+  left: 22vw;
+  bottom: 16vh;
   height: 4vh;
 }
 
 .user-tab-remove-friend-button {
   position: relative;
-  left: 15vw;
-  bottom: 20vh;
+  left: 22vw;
+  bottom: 16vh;
   height: 4vh;
 }
 
@@ -424,18 +454,18 @@ button:hover {
 
 #main-feed {
   position: fixed;
-  left: 20vw;
-  top: 23vh;
+  left: 32.5vw;
+  top: 20vh;
   border: 1px solid black;
   border-radius: 3px;
   box-shadow: 1px 1px 1px 1px black;
-  width: 60vw;
+  width: 35vw;
   height: 62vh;
   display: flex;
   flex-direction: column;
   overflow: scroll;
   gap: 1vh;
-  padding-left: 1vw;
+  padding: 1vw;
 }
 
 .loading-screen {
@@ -446,4 +476,5 @@ button:hover {
   position: fixed;
   left: 44vw;
   text-align: left;
+  color: yellow;
 }

@@ -7,6 +7,7 @@ const AllUsers = (props) => {
   const usersRef = props.firestore.collection("users");
   const query = usersRef.orderBy("accountBirthday", "desc");
   const [users] = useCollectionData(query, { idField: "id" });
+  const [choices, setChoices] = useState([]);
   const [friends, setFriends] = useState([]);
 
   const getFriends = async () => {
@@ -64,11 +65,11 @@ const AllUsers = (props) => {
     });
     getFriends();
   };
-
   return (
     <div className="all-users-page">
       {users &&
-        users.map((user) => (
+        users.map((user) => 
+         (
           <div key={user.id}>
             <UserTab
               user={user}
@@ -78,16 +79,17 @@ const AllUsers = (props) => {
             />
             {user.id !== props.user.uid ? (
               <p className="profile-link" onClick={() => props.onSelect(user)}>
-                <Link to={`/all-users/${user.id}`}>Profile</Link>
+                <Link to={`/all-users/${user.id}`}>View Profile</Link>
               </p>
             ) : (
               <p className="profile-link" onClick={() => props.onSelect(user)}>
-                <Link to={`/user-profile`}>Profile</Link>
+                <Link to={`/user-profile`}>View Profile</Link>
               </p>
             )}
           </div>
         ))}
     </div>
+  
   );
 };
 

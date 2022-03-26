@@ -3,7 +3,7 @@ import React from "react";
 const UserTab = (props) => {
   return (
     <div className="user-tab">
-      <p className="user-tab-id">{props.user.id}</p>
+      <p className="user-tab-id">{props.user.id ? props.user.id : '0'}</p>
       <p className="user-tab-name">{props.user.name}</p>
       <div className="user-tab-image-wrapper">
         <img
@@ -19,14 +19,14 @@ const UserTab = (props) => {
               className="user-tab-add-friend-button"
               onClick={() => props.addUser(props.user.id, true)}
             >
-              Add Friend
+              Follow
             </button>
           ) : (
             <button
               className="user-tab-remove-friend-button"
               onClick={() => props.addUser(props.user.id, false)}
             >
-              Remove Friend
+              Unfollow
             </button>
           )}
         </>

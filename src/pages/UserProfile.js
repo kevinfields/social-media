@@ -6,6 +6,7 @@ import Post from "../components/Post";
 import UserTab from "../components/UserTab";
 import { Link } from "react-router-dom";
 
+
 const UserProfile = (props) => {
   const [userData, setUserData] = useState({});
   const [edit, setEdit] = useState({
@@ -19,11 +20,6 @@ const UserProfile = (props) => {
   const [openEditor, setOpenEditor] = useState(false);
   const [friends, setFriends] = useState([]);
   const [openFriends, setOpenFriends] = useState(false);
-  const [openFollowers, setOpenFollowers] = useState(false);
-  //const postsRef = props.firestore
-  //  .collection("users")
-  //  .doc(props.user.uid)
-  //  .collection("posts");
   const userRef = props.firestore.collection("users").doc(props.user.uid);
   const usersRef = props.firestore.collection('users');
   const postsRef = userRef.collection("posts");
@@ -183,21 +179,6 @@ const UserProfile = (props) => {
     // eslint-disable-next-line
   }, []);
 
-  //  useEffect(() => {
-  //    getPosts();
-  //  }, []);
-
-  //  const getPosts = async () => {
-  //    let data;
-  //    await postsRef.get().then((doc) => {
-  //      data = doc.data();
-  //      setUserPosts({
-  //          ...userPosts,
-
-  //      })
-  //    });
-  //  };
-
   return (
     <div className="user-profile">
       <p id="user-profile-name-header">
@@ -227,7 +208,7 @@ const UserProfile = (props) => {
               className="profile-editor-switch"
               onClick={() => setOpenEditor(true)}
             >
-              Open Editor
+              Edit Profile
             </button>
           ) : (
             <button
@@ -264,13 +245,7 @@ const UserProfile = (props) => {
             >
               View List
             </button>
-          ) : null
-            // <button
-            //   onClick={() => openFriendsList(false)}
-            //   id="user-profile-post2-list-button"
-            // >
-            //   View Posts
-            // </button>
+          ) : null 
           }
           </p>
           <p id="user-profile-biography" className="user-profile-details">
@@ -366,7 +341,7 @@ const UserProfile = (props) => {
                   to={`/all-users/${friend.id}`}
                   onClick={() => props.changeOtherUser(friend.data)}
                 >
-                  Profile
+                   View Profile
                 </Link>
               </div>
             ))}

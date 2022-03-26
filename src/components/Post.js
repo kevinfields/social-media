@@ -75,7 +75,7 @@ const Post = (props) => {
 
   return (
     <div className="post">
-      <h4>{props.text}</h4>
+      <h2>{props.text}</h2>
       <h3>
         <ProfileLink /> - {formatTime(props.createdAt.seconds + "000")}
       </h3>

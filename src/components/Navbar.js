@@ -19,11 +19,6 @@ const Navbar = (props) => {
     <div className="user-home-nav">
       <section className="nav-links">
         <p>
-          <Link className="nav-link" to="/sign-out">
-            Sign Out
-          </Link>
-        </p>
-        <p>
           <Link className="nav-link" to="/my-feed">
             My Feed
           </Link>
@@ -41,6 +36,11 @@ const Navbar = (props) => {
         <p>
           <Link className="nav-link" to="/all-users">
             All Users
+          </Link>
+        </p>
+        <p>
+          <Link className="nav-link" to="/sign-out">
+            Sign Out
           </Link>
         </p>
       </section>
