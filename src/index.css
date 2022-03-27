@@ -30,7 +30,6 @@ button:active {
   transform: translateX(1px) translateY(1px);
 }
 
-
 .App {
   border: 2px solid cyan;
   border-radius: 5px;
@@ -130,7 +129,7 @@ button:active {
 }
 
 .user-profile-details button {
-  color: whitesmoke
+  color: whitesmoke;
 }
 
 #user-profile-email {
@@ -213,7 +212,7 @@ button:active {
   left: 18vw;
   top: 9vh;
   font-size: 8pt;
-  color: whitesmoke
+  color: whitesmoke;
 }
 #user-profile-bio-editor {
   font-family: Arial, Helvetica, sans-serif;
@@ -482,7 +481,7 @@ button:active {
 }
 
 .loading-screen {
-  font-family:'Times New Roman', Times, serif;
+  font-family: "Times New Roman", Times, serif;
   font-weight: bold;
   font-size: 20pt;
   width: 12vw;
@@ -490,4 +489,14 @@ button:active {
   left: 44vw;
   text-align: left;
   color: yellow;
+}
+
+.sort-users-page {
+  position: fixed;
+  left: 16vw;
+  top: 16vh;
+  border: 1px solid black;
+  color: white;
+  height: 60vh;
+  overflow-y: scroll;
 }
