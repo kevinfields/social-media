@@ -500,3 +500,16 @@ button:active {
   height: 60vh;
   overflow-y: scroll;
 }
+
+.search-item {
+  border: 1px solid black;
+}
+
+.search-profile-link {
+  width: fit-content;
+  text-decoration: underline;
+}
+
+.search-profile-link:hover {
+  cursor: pointer;
+}

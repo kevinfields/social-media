@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 const SortUsers = (props) => {
   const [search, setSearch] = useState("");
@@ -51,7 +50,6 @@ const SortUsers = (props) => {
         uArray.push(u.toLowerCase());
       });
       uArr = uArr.filter((u) => u !== " ");
-      console.log("uArray: " + uArray);
       for (let i = 0; i < searchArr.length; i++) {
         if (uArray.includes(searchArr[i])) {
           if (uArray[i] === searchArr[i]) {
@@ -120,9 +118,14 @@ const SortUsers = (props) => {
       <button onClick={() => searchTerm()}>Search</button>
       {items &&
         items.map((i) => (
-          <p>
+          <p key={i.uid} className="search-item">
             {i.item ? i.item : null} - Score: {i.score ? i.score : "0"}
-            <p onClick={() => userChange(i.uid)}>Profile</p>
+            <p
+              onClick={() => userChange(i.uid)}
+              className="search-profile-link"
+            >
+              Profile
+            </p>
           </p>
         ))}
     </div>

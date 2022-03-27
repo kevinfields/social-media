@@ -45,8 +45,8 @@ const Navbar = (props) => {
           </Link>
         </p>
         <p>
-          <Link className="nav-link" to="/sort-users">
-            Sort Users
+          <Link className="nav-link" to="/search-users">
+            Search Users
           </Link>
         </p>
       </section>
@@ -101,7 +101,7 @@ const Navbar = (props) => {
             }
           />
           <Route
-            path={`/sort-users`}
+            path={`/search-users`}
             element={
               <SortUsers
                 firestore={props.firestore}
