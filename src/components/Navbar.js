@@ -102,7 +102,12 @@ const Navbar = (props) => {
           />
           <Route
             path={`/sort-users`}
-            element={<SortUsers firestore={props.firestore} />}
+            element={
+              <SortUsers
+                firestore={props.firestore}
+                changeOtherUser={(u) => changeOtherUser(u)}
+              />
+            }
           />
         </Routes>
       </section>

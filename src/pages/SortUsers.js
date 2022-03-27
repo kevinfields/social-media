@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const SortUsers = (props) => {
   const [search, setSearch] = useState("");
@@ -9,6 +11,7 @@ const SortUsers = (props) => {
     },
   ]);
   const [guess, setGuess] = useState("");
+  const navigate = useNavigate();
 
   const getUsers = async () => {
     let users = [];
@@ -21,6 +24,7 @@ const SortUsers = (props) => {
           users.push({
             item: doc.data().name,
             score: 0,
+            uid: doc.id,
           });
         });
       })
@@ -71,6 +75,7 @@ const SortUsers = (props) => {
       catcher.push({
         item: u.item,
         score: score,
+        uid: u.uid,
       });
     }
     catcher.sort((a, b) => b.score - a.score);
@@ -84,6 +89,23 @@ const SortUsers = (props) => {
         score: 0,
       });
     }
+  };
+
+  const userChange = async (uid) => {
+    let data;
+    let id;
+    await props.firestore
+      .collection("users")
+      .doc(uid)
+      .get()
+      .then((doc) => {
+        data = doc.data();
+        id = doc.id;
+      });
+
+    props.changeOtherUser(data);
+
+    navigate(`/all-users/${id}`);
   };
 
   return (
@@ -100,6 +122,7 @@ const SortUsers = (props) => {
         items.map((i) => (
           <p>
             {i.item ? i.item : null} - Score: {i.score ? i.score : "0"}
+            <p onClick={() => userChange(i.uid)}>Profile</p>
           </p>
         ))}
     </div>
