@@ -55,6 +55,11 @@ const Post = (props) => {
     setOpen(false);
   };
 
+  const refresh = () => {
+    getComments().then(() => {
+      setComs(comments);
+    });
+  };
   useEffect(() => {
     getComments().then(() => {
       setComs(comments);
@@ -98,6 +103,7 @@ const Post = (props) => {
               post={props.postId}
               cRef={props.commentRef}
               key={props.postId + coms.indexOf(c)}
+              refresh={() => refresh()}
             />
           ))
         : null}

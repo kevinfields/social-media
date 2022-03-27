@@ -52,7 +52,9 @@ const AllUsers = (props) => {
       followersList.push(props.user.uid);
     } else {
       friendsList = friendsList.filter((friend) => friend !== id);
-      followersList = followersList.filter((follow) => follow !== props.user.uid);
+      followersList = followersList.filter(
+        (follow) => follow !== props.user.uid
+      );
     }
 
     await usersRef.doc(props.user.uid).set({
@@ -68,8 +70,7 @@ const AllUsers = (props) => {
   return (
     <div className="all-users-page">
       {users &&
-        users.map((user) => 
-         (
+        users.map((user) => (
           <div key={user.id}>
             <UserTab
               user={user}
@@ -89,7 +90,6 @@ const AllUsers = (props) => {
           </div>
         ))}
     </div>
-  
   );
 };
 
