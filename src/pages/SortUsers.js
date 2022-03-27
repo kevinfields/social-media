@@ -5,11 +5,14 @@ const SortUsers = (props) => {
   const [search, setSearch] = useState("");
   const [items, setItems] = useState([
     {
-      item: "none",
+      item: "-",
       score: 0,
     },
   ]);
-  const [guess, setGuess] = useState("");
+  const [guess, setGuess] = useState({
+    item: "-",
+    score: 0,
+  });
   const navigate = useNavigate();
 
   const getUsers = async () => {
@@ -80,7 +83,10 @@ const SortUsers = (props) => {
     setItems([...catcher]);
 
     if (catcher[0].score > catcher[1].score * 1.25) {
-      setGuess(catcher[0]);
+      setGuess({
+        item: catcher[0].item,
+        score: catcher[0].score,
+      });
     } else {
       setGuess({
         item: "-",
@@ -108,8 +114,12 @@ const SortUsers = (props) => {
 
   return (
     <div className="sort-users-page">
-      <p>You are probably looking for {guess.item}</p>
-      <p>Score: {guess.score}</p>
+      {guess.item !== "-" ? (
+        <>
+          <p>You are probably looking for {guess.item}</p>
+          <p>Score: {guess.score}</p>
+        </>
+      ) : null}
       <input
         type="text"
         value={search}
