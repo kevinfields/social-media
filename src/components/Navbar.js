@@ -6,6 +6,7 @@ import CreatePost from "../pages/CreatePost";
 import AllUsers from "../pages/AllUsers";
 import MyFeed from "../pages/MyFeed";
 import OtherUser from "../pages/OtherUser";
+import SortUsers from "../pages/SortUsers";
 
 const Navbar = (props) => {
   const [user, setUser] = useState("");
@@ -41,6 +42,11 @@ const Navbar = (props) => {
         <p>
           <Link className="nav-link" to="/sign-out">
             Sign Out
+          </Link>
+        </p>
+        <p>
+          <Link className="nav-link" to="/search-users">
+            Search Users
           </Link>
         </p>
       </section>
@@ -91,6 +97,15 @@ const Navbar = (props) => {
                 firestore={props.firestore}
                 user={user}
                 browser={props.user}
+              />
+            }
+          />
+          <Route
+            path={`/search-users`}
+            element={
+              <SortUsers
+                firestore={props.firestore}
+                changeOtherUser={(u) => changeOtherUser(u)}
               />
             }
           />
